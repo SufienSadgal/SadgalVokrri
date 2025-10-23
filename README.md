@@ -1,2 +1,2 @@
 # SadgalVokrri
-Software Engineering 2 (polimi)
+Software Engineering 2 (PoliMi)
