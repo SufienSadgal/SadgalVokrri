@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\usepackage[
+    pdfauthor={Fabio Vokrri},
+    pdftitle={Notes on Foundations of Operations Research},
+    pdfsubject={Operations Research, Problem Modelling, Linear Programming}
+]{hyperref}
+
+\usepackage{multicol}
+
+
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0.1,0.2,0.5}
+\definecolor{backcolour}{rgb}{0.98, 0.98, 0.98}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codeblue},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    xleftmargin=20pt,
+    xrightmargin=20pt,
+    aboveskip=10pt,
+    belowskip=10pt
+}
+
+% \lstset{language=Alloy}
+\lstset{style=mystyle}
+
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+    \vspace*{1cm}
+    \includegraphics[width=0.5\linewidth]{source/images/logo_polimi_scritta2.eps} \\
+    \vspace{0.5cm}
+    {\small{SCHOOL OF INDUSTRIAL AND \\ INFORMATION ENGINEERING}}
+    \vfill
+    
+    {\huge \textbf{RASD}} \\
+    \vspace{0.5cm}
+    {\Huge \textbf{\textit{Best Bike Paths}}}
+    
+    \vspace{1cm}
+    \textbf{Fabio Vokrri (10738386) \\ Soufien Sadgal (11003465)} \\
+    \vspace{0.5cm}
+    \today
+    
+    \vfill
+\end{titlepage}
+
+\clearpage
+\tableofcontents
+\listoffigures
+\clearpage
+
+\input{source/sections/1_introduction}
+
+\end{document}
