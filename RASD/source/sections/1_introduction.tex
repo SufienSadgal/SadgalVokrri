@@ -3,57 +3,57 @@
 The \textit{Best Bike Paths} (\textit{BBP}) system has one objective in mind: support the ever-growing cycling community by providing a platform for recording, browsing, and sharing optimal bike routes. By integrating automated data acquisition from mobile sensors with manual user contributions, BBP builds a reliable inventory of safe and smooth paths. It enhances the biking experience by offering detailed performance statistics and real-time meteorological information on the go. Furthermore, BBP promotes safety by automatically identifying physical road hazards through community-verified data, which non-registered users can also benefit from. By prioritizing routes where speed limits and traffic density are bike-friendly, it promotes a safer environment for riders of all skill levels. Through its dual-mode insertion and analytical scoring, BBP becomes a comprehensive tool for both personal fitness and community navigation.
 
 \subsubsection{Goals} % ------------------------------------------------------------------
-\begin{description}
-    \item[G1] Allow registered users to record, store and track their cycling activities in order to have a history of their activities. (!!)
-    \item[G2] Allow registered users to record and store their cycling activities in order to enrich and update the paths inventory. (!!)
-    \item[G3] Allow users to continuously update information about bike paths.
-    \item[G4] Display statistics about the trip, including the total distance, average speed and performance metrics.
-    \item[G5] Enrich trip data with meteorological information retrieved from external services.
-    \item[G6] Support registered users to manually insert information about a bike path, including the name of the street, its status and the presence of obstacles along the way, via a virtual map. (!!) 
-    \item[G7] Make data available to all users, registered or not.
-\end{description}
+\begin{itemize}
+    \item G1: Allow registered users to record, store and track their cycling activities in order to have a history of their activities. (!!)
+    \item G2: Allow registered users to record and store their cycling activities in order to enrich and update the paths inventory. (!!)
+    \item G3: Allow users to continuously update information about bike paths.
+    \item G4: Display statistics about the trip, including the total distance, average speed and performance metrics.
+    \item G5: Enrich trip data with meteorological information retrieved from external services.
+    \item G6: Support registered users to manually insert information about a bike path, including the name of the street, its status and the presence of obstacles along the way, via a virtual map. (!!) 
+    \item G7: Make data available to all users, registered or not.
+\end{itemize}
 
 \subsection{Scope} % ------------------------------------------------------------------
 
 \subsubsection{World Phenomena}
-\begin{description}
-    \item[WP1] Users physically drive their bike from one location to another over a period of time.
-    \item[WP2] Mobile devices record changes of their sensors, like GPS coordinates \footnote{GPS coordinates are registered by the device only if the user enables it. We assume that the device location is always on.}, orientation, speed and acceleration, independently from the system. 
-    \item[WP3] Weather conditions, temperature and wind intensity change in a specific location over a period of time.
-    \item[WP4] Road conditions change in a specific location over a period of time.
-    \item[WP5] Users encounter obstacles along their way.
-    \item[WP6] Users ride their bikes in trafficked roads.
-    \item[WP7] Users develop opinions over certain paths.
-    \item[WP8] Users decide to accept the automatic tracking of the system.
-\end{description}
+\begin{itemize}
+    \item WP1: Users physically drive their bike from one location to another over a period of time.
+    \item WP2: Mobile devices record changes of their sensors, like GPS coordinates \footnote{GPS coordinates are registered by the device only if the user enables it. We assume that the device location is always on.}, orientation, speed and acceleration, independently from the system. 
+    \item WP3: Weather conditions, temperature and wind intensity change in a specific location over a period of time.
+    \item WP4: Road conditions change in a specific location over a period of time.
+    \item WP5: Users encounter obstacles along their way.
+    \item WP6: Users ride their bikes in trafficked roads.
+    \item WP7: Users develop opinions over certain paths.
+    \item WP8: Users decide to accept the automatic tracking of the system.
+\end{itemize}
 
 \subsubsection{Shared Phenomena}
 
 \paragraph{World Controlled Shared Phenomena}
-\begin{description}
-    \item[SP1] Users register to the service via the specific form.
-    \item[SP2] Users log in via the specific form.
-    \item[SP3] Users start the recording of their biking session.
-    \item[SP4] External services send weather data to the system, if available, under request.
-    \item[SP5] Registered users manually insert bike path status information via the UI.
-    \item[SP6] Registered users correct automatically acquired data about the bike path status via the UI.
-    \item[SP7] Registered users confirm automatically acquired data about the bike path status via the UI.
-    \item[SP8] Users publish acquired information about paths.
-    \item[SP9] Users browse possible paths.
-    \item[SP10] Users plan their biking trip by entering the departure and destination point via the UI.
-    \item[SP11] Users accept the automatic tracking of the system.
-\end{description}
+\begin{itemize}
+    \item SP1: Users register to the service via the specific form.
+    \item SP2: Users log in via the specific form.
+    \item SP3: Users start the recording of their biking session.
+    \item SP4: External services send weather data to the system, if available, under request.
+    \item SP5: Registered users manually insert bike path status information via the UI.
+    \item SP6: Registered users correct automatically acquired data about the bike path status via the UI.
+    \item SP7: Registered users confirm automatically acquired data about the bike path status via the UI.
+    \item SP8: Users publish acquired information about paths.
+    \item SP9: Users browse possible paths.
+    \item SP10: Users plan their biking trip by entering the departure and destination point via the UI.
+    \item SP11: Users accept the automatic tracking of the system.
+\end{itemize}
 
 \paragraph{Machine Controlled Shared Phenomena}
-\begin{description}
-    \item[SP12] The system records and stores cycling activities, including metrics, such as total distance covered and average speed. 
-    \item[SP13] Mobile devices send GPS coordinates and sensor data from the gyroscope and accelerometer to the system, if automatic tracking accepted.
-    \item[SP14] The system sends a request to external services to query weather information.
-    \item[SP15] The system collects biking path information.
-    \item[SP16] The system computes a path score based on the available information relative to the path.
-    \item[SP17] The system visualizes the available bike paths connecting the departure point to the destination point based on their rank.
-    \item[SP18] The system signals to the user obstacles along paths.
-\end{description}
+\begin{itemize}
+    \item SP12 The system records and stores cycling activities, including metrics, such as total distance covered and average speed. 
+    \item SP13 Mobile devices send GPS coordinates and sensor data from the gyroscope and accelerometer to the system, if automatic tracking accepted.
+    \item SP14 The system sends a request to external services to query weather information.
+    \item SP15 The system collects biking path information.
+    \item SP16 The system computes a path score based on the available information relative to the path.
+    \item SP17 The system visualizes the available bike paths connecting the departure point to the destination point based on their rank.
+    \item SP18 The system signals to the user obstacles along paths.
+\end{itemize}
 
 \subsection{Definitions, Acronyms, Abbreviations} % ------------------------------------------------------------------
 \subsubsection{Definitions}
