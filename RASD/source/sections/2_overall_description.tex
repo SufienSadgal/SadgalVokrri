@@ -35,9 +35,11 @@ A registered user accesses the account management section and requests the delet
 
 % MANDA FOTO SCHEMI DRAW.IO CHE LI INSERISCO
 
+
 \subsubsection{State Diagrams}
 
 % MANDA FOTO SCHEMI DRAW.IO CHE LI INSERISCO
+
 
 \subsection{Product Functions}
 
@@ -85,16 +87,16 @@ Non-registered users can also take advantage of the data collected by the BBP sy
 
 \subsubsection{Domain Assumptions}
 \begin{enumerate}
-    \item Biking path information entered by registered users is accurate.
+    \item Users aim to provide truthful and accurate information when manually reporting bike path conditions
     \item Users’ devices have accelerometer and gyroscope sensors through which the BBP system automatically gathers information about biking paths.
     \item Data gathered from devices’ sensors is accurate.
     \item Users consent to enable and share their GPS location to the BBP system when choosing to automatically gather information about their biking trip.
-    \item Users’ devices have a reliable internet connection through which they can access the BBP system’s data.
+    \item Users’ devices have internet connectivity when accessing BBP services.
     \item The external map service reliably responds with geographical data when the BBP system sends the request.
     \item The geographical information gathered from the external map service is accurate.
     \item The external weather service reliably responds with meteorological data when the BBP system sends the request.
     \item The meteorological information gathered from the external weather service is accurate.
-    \item Devices’ batteries have enough power to allow BBP system to gather all the needed data and perform all the required computations.
+    \item A sufficient number of users actively contribute reports in order to keep bike path information up to date.
 \end{enumerate}
 
 \subsubsection{Dependencies}
@@ -108,10 +110,8 @@ Non-registered users can also take advantage of the data collected by the BBP sy
 
 \subsubsection{Constraints}
 \begin{enumerate}
-    \item Network Connectivity: BBP system requires an active internet connection in order to query weather information, load maps, publish and retrieve information about trips.
-    \item GPS signal: BBP system requires a stable GPS system when automatically gathering information about the trip. There might be cases where the GPS signal is lost when the device is passing through tunnels.
-    \item Sensors Accuracy: BBP system is constrained by the accuracy of the devices’ sensors while gathering information about the trip.
-    \item Battery Usage: BBP system is constrained by the battery drainage given by the continuous use of the GPS system and internet connection. 
+    \item Network Connectivity: The system shall restrict access to external data and report publication when network connectivity is not available.
+    \item Data collection: The system must not collect or process location data without explicit user consent. 
     \item Privacy: The collection of location data must comply with data protection regulations (e.g. GDPR).
 \end{enumerate}
 
