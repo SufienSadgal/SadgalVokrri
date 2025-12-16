@@ -4,11 +4,32 @@
 
 \subsubsection{Scenarios}
 
-\paragraph{Scenario 1} % TODO: MODIFY TITLE
+\paragraph{User registration} % TODO: MODIFY TITLE
+A non-registered user accesses the system and decides to create an account. The user provides the required credentials and completes the registration process.
 
-\paragraph{Scenario 2} % TODO: MODIFY TITLE
+\paragraph{Trip planning and path selection} % TODO: MODIFY TITLE
+A registered user specifies a departure point and a destination in order to plan a bike trip. The system displays the available bike paths, together with aggregated statistics, current path conditions, and weather information. The user compares the options and selects the most suitable path for the trip.
 
-% COPIA INCOLLA \paragraph{*TITOLO SCENARIO*} PER AGGIUNGERE NUOVI SCENARI
+\paragraph{Review of trip statistics} % TODO: MODIFY TITLE
+After completing a cycling journey, the user accesses the system to review the statistics associated with the performed trip. The system displays information such as distance, duration, and average speed, allowing the user to analyse the outcome of the journey.
+
+\paragraph{Validation of automatically collected data} % TODO: MODIFY TITLE
+After a bike trip, the system automatically collects information about the bike path based on sensor data. The user reviews the collected information, corrects potential inaccuracies, and confirms the report. Once validated, the user publishes the report to make it available to the community.
+
+\paragraph{Manual reporting after discarding automatic data} % TODO: MODIFY TITLE
+After completing a bike trip, the user decides that the automatically collected data does not accurately reflect the perceived path conditions. The user discards the automatic data and manually inserts information about the bike path. The manually created report is then published.
+
+\paragraph{Attempted publication without validation} % TODO: MODIFY TITLE
+A user attempts to publish automatically collected information without validating it. The system prevents the publication and notifies the user that validation is required. The user is then prompted to correct and then validate the data before publish them.
+
+\paragraph{Public browsing by non-registered users} % TODO: MODIFY TITLE
+A non-registered user accesses the system to explore available bike paths. The user browses publicly available information, including path status and general conditions, in order to identify a suitable route.
+
+\paragraph{Notification of changes and replanning} % TODO: MODIFY TITLE
+After planning a bike trip, the registered user receives a notification indicating changes affecting the selected path, such as updated weather conditions or the presence of a newly reported obstacle. Based on this information, the user decides to cancel the planned trip and proceeds to plan an alternative route.
+
+\paragraph{Account deletion} % TODO: MODIFY TITLE
+A registered user accesses the account management section and requests the deletion of their account. The system processes the request and removes the user account.
 
 \subsubsection{Domain Class Diagrams}
 
@@ -20,9 +41,26 @@
 
 \subsection{Product Functions}
 
-\paragraph{Product Function 1} % TODO: MODIFY TITLE
+\paragraph{User account management} % TODO: MODIFY TITLE
+The system provides user account management functionalities that allow individuals to register and access the platform as registered users. This enables personalised features such as trip recording, reporting, and notifications, while still allowing non-registered users to access publicly available information.
 
-\paragraph{Product Function 2} % TODO: MODIFY TITLE
+\paragraph{Trip recording and performance statistics} % TODO: MODIFY TITLE
+The system allows registered users to record their cycling trips either manually or automatically. Collected data is stored to build a history of cycling activities, enabling users to review performance statistics such as distance, duration, and average speed, and to analyse their progress over time.
+
+\paragraph{Path browsing and search} % TODO: MODIFY TITLE
+The system provides an inventory of bike paths that can be browsed and searched by both registered and non-registered users. Publicly available information about paths, including their status and overall conditions, is made accessible to support route exploration and discovery.
+
+\paragraph{Route planning and path recommendation} % TODO: MODIFY TITLE
+The system supports users in planning their trips by allowing them to specify a departure and a destination. Based on the available information, the system returns a set of possible bike paths, ordered according to their overall score.
+
+\paragraph{Path reporting} % TODO: MODIFY TITLE
+The system enables users to contribute information about bike paths by reporting conditions, obstacles, and other relevant details after completing a trip. Reports can be created manually or derived automatically from sensor data collected during the trip, contributing to a richer and more detailed description of bike paths.
+
+\paragraph{Report validation and publication} % TODO: MODIFY TITLE
+The system allows users to review, confirm, or correct automatically collected information before it is made publicly available. Only validated reports are published, ensuring that shared information about bike paths is reliable and consistent.
+
+\paragraph{User notifications on relevant updates} % TODO: MODIFY TITLE
+The system provides notifications to users when relevant changes occur, such as updates in weather conditions or the presence of newly reported obstacles affecting planned trips. This allows users to adapt their plans and make informed decisions in a timely manner.
 
 % COPIA INCOLLA \paragraph{*TITOLO PRODUCT FUNCTION*} PER AGGIUNGERE NUOVE PRODUCT FUNCTIONS
 
