@@ -4,10 +4,10 @@ The \textit{Best Bike Paths} (\textit{BBP}) system has one objective in mind: su
 
 \subsubsection{Goals} % ------------------------------------------------------------------
 \begin{itemize}
-    \item G1: Users are able to keep track of their cycling activities over time.
-    \item G2: Information about bike paths is continuously enriched based on users’ cycling activities and reports.
-    \item G3: Automatically collected information about bike paths is validated by users before being made public.
-    \item G4: Users are provided with statistics about their cycling performance.
+    \item G1: Registered Users are able to keep track of their cycling activities over time.
+    \item G2: Information about bike paths is continuously enriched based on registered users’ cycling activities and reports.
+    \item G3: Automatically collected information about bike paths is validated by registered users before being made public.
+    \item G4: Registered users are provided with statistics about their cycling performance.
     \item G5: Trip data is enriched with meteorological information.
     \item G6: Bike path information is accessible to both registered and unregistered users.
     \item G7: Users are supported in selecting suitable bike paths
@@ -15,8 +15,8 @@ The \textit{Best Bike Paths} (\textit{BBP}) system has one objective in mind: su
 
 \subsection{Scope} % ------------------------------------------------------------------
 The core function of Best Bike Paths (BBP) is to collect, integrate, and provide reliable information about bike paths in order to support cyclists in making informed decisions about the routes they choose to follow. The system acts as a mediator between real-world bike path conditions, cyclists’ experiences and reports, and external data sources such as meteorological services.
-Through BBP, users can contribute information about bike path conditions, validate data automatically collected by the system, and explore available routes based on their suitability and current conditions. Registered users can record their trips manually or automatically, report obstacles or unsafe situations, confirm or correct detected information, and publish validated data to the community. Unregistered users can access publicly available information but are not allowed to contribute or modify data.
-The system interacts with external weather services to retrieve environmental data and enrich trip information. It also integrates with mobile devices to receive sensor data—such as GPS traces and accelerometer readings—that may indicate relevant path features or anomalies. BBP maintains a consolidated and continuously updated view of bike path conditions by merging contributions from multiple users according to their freshness, reliability, and level of confirmation.
+Through BBP, users can contribute with information about bike path conditions, validate data automatically collected by the system, and explore available routes based on their suitability and current conditions. Registered users can record their trips manually or automatically, report obstacles or unsafe situations, confirm or correct detected information, and publish validated data to the community. Unregistered users can access publicly available information but are not allowed to contribute or modify data.
+The system interacts with external weather services to retrieve environmental data and enrich trip information. It also integrates with mobile devices to receive sensor data, such as GPS traces and accelerometer readings,that may indicate relevant path features or anomalies. BBP maintains a consolidated and continuously updated view of bike path conditions by merging contributions from multiple users according to their freshness, reliability, and level of confirmation.
 
 \subsubsection{World Phenomena}
 \begin{itemize}
@@ -34,29 +34,36 @@ The system interacts with external weather services to retrieve environmental da
 
 \paragraph{World Controlled Shared Phenomena}
 \begin{itemize}
-    \item SP1: Users register to the service via the specific form.
-    \item SP2: Users log in via the specific form.
+    \item SP1: Users register to the service via a specific form.
+    \item SP2: Users log in via a specific form.
     \item SP3: External services provide weather data to the system in response to a request, if available.
     \item SP4: Registered users manually insert bike path status information.
     \item SP5: Registered users correct automatically acquired data about the bike path status.
     \item SP6: Registered users confirm automatically acquired data about the bike path status.
-    \item SP7: Users publish information about bike paths collected manually or automatically.
+    \item SP7: Registered users publish information about bike paths collected manually or automatically.
     \item SP8: Users request information about available bike paths.
     \item SP9: Users plan their biking trip by entering the departure and destination point.
-    \item SP10: Users accept the automatic tracking of the system.
-    \item SP11: The user’s device sends GPS data and other relevant sensor measurements to the system.
+    \item SP10: Registered users accept the automatic tracking of the system.
+    \item SP11: Registered users' devices send GPS data and other relevant sensor measurements to the system.
 \end{itemize}
 
 \paragraph{Machine Controlled Shared Phenomena}
 \begin{itemize}
-    \item SP12:  The system provides suggested bike paths between the selected departure and destination points.
+    \item SP12: The system provides suggested bike paths between the selected departure and destination points.
     \item SP13: The system sends a request to external services to query weather information.
     \item SP14: The system informs users about the presence of obstacles along paths.
 \end{itemize}
 
 \subsection{Definitions, Acronyms, Abbreviations} % ------------------------------------------------------------------
 \subsubsection{Definitions}
-
+\begin{itemize}
+    \item Software: ordered set of instructions that tells the computer how to use the available data to perform the tasks it is designed to carry out.
+    \item Biking Trip: journey performed by bike over a period of time following a predetermined route.
+    \item External Service: software outside the application’s domain, consumed and relied upon by the primary application in order to perform the actions it is designed to execute.
+    \item Obstacle: something, possibly dangerous, that hinders the biking trip or might block the route. Some examples of obstacles may be potholes, tree branches on the route, roadworks or road closures.
+    \item Accelerometer: electronic sensor that measures the acceleration of the device.
+    \item Gyroscope: electronic sensor that measures the orientation and angular velocity of the device.
+\end{itemize}
 
 \subsubsection{Acronyms}
 \begin{itemize}
