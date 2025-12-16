@@ -1,0 +1,79 @@
+\section{Overall Description}
+
+\subsection{Product Perspective}
+
+\subsubsection{Scenarios}
+
+\paragraph{Scenario 1} % TODO: MODIFY TITLE
+
+\paragraph{Scenario 2} % TODO: MODIFY TITLE
+
+% COPIA INCOLLA \paragraph{*TITOLO SCENARIO*} PER AGGIUNGERE NUOVI SCENARI
+
+\subsubsection{Domain Class Diagrams}
+
+% MANDA FOTO SCHEMI DRAW.IO CHE LI INSERISCO
+
+\subsubsection{State Diagrams}
+
+% MANDA FOTO SCHEMI DRAW.IO CHE LI INSERISCO
+
+\subsection{Product Functions}
+
+\paragraph{Product Function 1} % TODO: MODIFY TITLE
+
+\paragraph{Product Function 2} % TODO: MODIFY TITLE
+
+% COPIA INCOLLA \paragraph{*TITOLO PRODUCT FUNCTION*} PER AGGIUNGERE NUOVE PRODUCT FUNCTIONS
+
+\subsection{User Characteristics}
+
+\subsubsection{Registered Users}
+Users are able to register and login to the platform. The registered user’s profile contains his personal trips and cycling activities, including statistics about each trip, such as total distance covered, average speed and other performance metrics. Registered users can insert and make publishable information about bike paths, including their status (e.g. optimal, medium, sufficient, requires maintenance) and the presence of relevant obstacles, like potholes. Registered users can manually or automatically insert information about paths:
+\begin{itemize}
+    \item Manual mode: users manually insert data, specifying the name and the status of each street they cycled through during the trip.
+    \item Automated Mode: users let the system acquire data from their mobile device while they bike. They must then confirm or correct the information acquired by the system before making it available to the community.
+\end{itemize}
+Registered users are able to share their location information and device sensors data to the system in order to automatically acquire information about the bike path they are cycling through. Also, the data they are sharing to the system is used to notify them of possible obstacles along their way during the cycling session, inserted by other users. Lastly, users are able to accept or deny the BBP system to gather weather information from external services through the device’s internet connection.
+Registered users can specify a departure and destination point and ask the system to visualize on a virtual map all the bike paths connecting these two points, ranked by a score computed based on the status of the path and how effective it is to let the user reach the destination point. 
+Registered users are able to change their preferences about GPS location sharing and internet access. For instance, if they previously granted GPS location sharing to the BBP system and don’t want to share their location anymore, they can deny it.
+Registered Users are able to modify and delete their cycling activities.
+Registered users are able to delete their accounts and all personal data associated with it. 
+
+\subsubsection{Non-Registered Users}
+Non-registered users can also take advantage of the data collected by the BBP system. Non-registered users can specify a departure and destination point and ask the system to visualize on a virtual map all the bike paths connecting these two points, ranked by a score computed based on the status of the path and how effective it is to let the user reach the destination point.
+
+\subsection{Assumptions, Dependencies and Constraints}
+
+\subsubsection{Domain Assumptions}
+\begin{enumerate}
+    \item Biking path information entered by registered users is accurate.
+    \item Users’ devices have accelerometer and gyroscope sensors through which the BBP system automatically gathers information about biking paths.
+    \item Data gathered from devices’ sensors is accurate.
+    \item Users consent to enable and share their GPS location to the BBP system when choosing to automatically gather information about their biking trip.
+    \item Users’ devices have a reliable internet connection through which they can access the BBP system’s data.
+    \item The external map service reliably responds with geographical data when the BBP system sends the request.
+    \item The geographical information gathered from the external map service is accurate.
+    \item The external weather service reliably responds with meteorological data when the BBP system sends the request.
+    \item The meteorological information gathered from the external weather service is accurate.
+    \item Devices’ batteries have enough power to allow BBP system to gather all the needed data and perform all the required computations.
+\end{enumerate}
+
+\subsubsection{Dependencies}
+\begin{enumerate}
+    \item External Map Service: BBP system relies on an external virtual map provider (i.e. Google Maps, MapBox or OpenStreetMap) to gather information about the users’ trip (mapping between current users positions and street names) and to allow them to visualize best biking paths connecting the departure and destination points.
+    \item External Weather Service: BBP system relies on an external meteorological data provider (i.e. OpenWeatherMap, AccuWeather) to gather information about the wind speed, temperature and humidity in users’ current location.
+    \item Mobile Operating System: BBP system relies on operating systems frameworks (i.e. iOS, Android) to access low-level hardware sensors, as accelerometer, gyroscope and GPS \footnote{
+        We assume that the GPS location is on by default and that the operating system of the device shares the location information under users' permission. We could have modelled the software so that it directly interacted with and relied upon the GPS framework independently of the operating system in use, but real life applications rely on the underlying operating system to collect users' location information. Therefore, we treat the GPS signal as a sensor of the device.
+    }
+\end{enumerate}
+
+\subsubsection{Constraints}
+\begin{enumerate}
+    \item Network Connectivity: BBP system requires an active internet connection in order to query weather information, load maps, publish and retrieve information about trips.
+    \item GPS signal: BBP system requires a stable GPS system when automatically gathering information about the trip. There might be cases where the GPS signal is lost when the device is passing through tunnels.
+    \item Sensors Accuracy: BBP system is constrained by the accuracy of the devices’ sensors while gathering information about the trip.
+    \item Battery Usage: BBP system is constrained by the battery drainage given by the continuous use of the GPS system and internet connection. 
+    \item Privacy: The collection of location data must comply with data protection regulations (e.g. GDPR).
+\end{enumerate}
+
