@@ -4,83 +4,88 @@
 
 \subsubsection{Scenarios}
 
-\paragraph{User registration} % TODO: MODIFY TITLE
-A non-registered user accesses the system and decides to create an account. The user provides the required credentials and completes the registration process.
+\paragraph{User Registration}
+Non-registered user \textit{U} accesses the system and decides to create an account. \textit{U} provides the required credentials (email and password) and completes the registration process.
 
-\paragraph{Trip planning and path selection} % TODO: MODIFY TITLE
-A registered user specifies a departure point and a destination in order to plan a bike trip. The system displays the available bike paths, together with aggregated statistics, current path conditions, and weather information. The user compares the options and selects the most suitable path for the trip.
+\paragraph{Trip Planning and Path Selection}
+User \textit{U} (registered or not) specifies a departure and a destination point in order to plan a bike trip. The system displays the available bike paths, ranked by their current condition, and weather information, if available. \textit{U} compares the options and selects the most suitable path for his trip.
 
-\paragraph{Review of trip statistics} % TODO: MODIFY TITLE
-After completing a cycling journey, the user accesses the system to review the statistics associated with the performed trip. The system displays information such as distance, duration, and average speed, allowing the user to analyse the outcome of the journey.
+\paragraph{Review of Trip Statistics}
+After completing a cycling journey, registered user \textit{U} reviews the statistics associated with the performed trip. The system displays information such as distance, duration, and average speed, allowing the user to analyse the outcome of the journey.
 
-\paragraph{Validation of automatically collected data} % TODO: MODIFY TITLE
-After a bike trip, the system automatically collects information about the bike path based on sensor data. The user reviews the collected information, corrects potential inaccuracies, and confirms the report. Once validated, the user publishes the report to make it available to the community.
+\paragraph{Validation of Automatically Acquired Data}
+During a bike trip, the system automatically collects information about the bike path based on sensor data. Registered user \textit{U} reviews the collected information, corrects potential inaccuracies, and confirms the report. Once validated, \textit{U} publishes the report to make it available to the community.
 
-\paragraph{Manual reporting after discarding automatic data} % TODO: MODIFY TITLE
-After completing a bike trip, the user decides that the automatically collected data does not accurately reflect the perceived path conditions. The user discards the automatic data and manually inserts information about the bike path. The manually created report is then published.
+\paragraph{Manual Reporting After Discarding Automatic Data}
+After completing a bike trip, registered user \textit{U} decides that the automatically collected data does not accurately reflect the perceived path conditions. \textit{U} discards the automatically acquired data and manually inserts information about the bike path. The manually created report is then published.
 
-\paragraph{Attempted publication without validation} % TODO: MODIFY TITLE
-A user attempts to publish automatically collected information without validating it. The system prevents the publication and notifies the user that validation is required. The user is then prompted to correct and then validate the data before publish them.
+\paragraph{Attempted Publication Without Validation}
+Registered user \textit{U} attempts to publish automatically collected information without validating it. The system prevents the publication and notifies \textit{U} that validation is required and it is then prompted to correct and validate the data before publishing it.
 
-\paragraph{Public browsing by non-registered users} % TODO: MODIFY TITLE
-A non-registered user accesses the system to explore available bike paths. The user browses publicly available information, including path status and general conditions, in order to identify a suitable route.
+\paragraph{Notification of Changes and Replanning}
+After planning a bike trip, registered user \textit{U} receives a notification indicating changes affecting the selected path, such as adverse weather conditions or the presence of a newly reported obstacle. Based on this information, \textit{U} decides to cancel the planned trip and proceeds to plan an alternative route.
 
-\paragraph{Notification of changes and replanning} % TODO: MODIFY TITLE
-After planning a bike trip, the registered user receives a notification indicating changes affecting the selected path, such as updated weather conditions or the presence of a newly reported obstacle. Based on this information, the user decides to cancel the planned trip and proceeds to plan an alternative route.
+\paragraph{Account Deletion}
+Registered user \textit{U} accesses the account management section and requests the deletion of their account. The system processes the request and removes his account.
 
-\paragraph{Account deletion} % TODO: MODIFY TITLE
-A registered user accesses the account management section and requests the deletion of their account. The system processes the request and removes the user account.
+\paragraph{Trip Deletion}
+Registered user \textit{U} decides to delete a completed trip from his cycling activities. The trip, including all statistics, is deleted from the user's history, but the underlying information about the path remains untouched, so other users can take advantage of the data when planning their trip.
 
 \subsubsection{Domain Class Diagrams}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{RASD/source/images/domain_class_diagram.jpeg}
+    \caption{Domain Class Diagram}
+    \label{fig:domain_class_diagram}
+\end{figure}
 
-% MANDA FOTO SCHEMI DRAW.IO CHE LI INSERISCO
 The class diagram represents a domain-level conceptual model of the BBP system. It captures the main entities of the application domain and their relationships, focusing on what information is managed rather than how it is technically implemented. External systems, devices, and technical components are intentionally excluded, while primitive types and generic collections are used to represent abstract data without imposing design-level constraints.
 The choice to model Report, Obstacle, and WeatherInfo as independent classes rather than simple attributes is motivated by their intrinsic complexity and lifecycle. Reports represent structured contributions that can be manually or automatically generated, validated, and published, and therefore require their own attributes and state. Obstacles are modeled as separate entities because they have specific properties such as severity, location, and resolution status, and may persist independently of individual reports. Weather information is represented as a class because weather conditions are time-dependent and can vary during a trip, making it unsuitable to model them as static attributes of a bike path.
 
 \subsubsection{State Diagrams}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{RASD/source/images/state_diagrams.jpeg}
+    \caption{State Diagrams.}
+    \label{fig:state_diagrams}
+\end{figure}
 
-% MANDA FOTO SCHEMI DRAW.IO CHE LI INSERISCO
-
-\paragraph{bike path state diagram}
+\paragraph{Bike Path State Diagram}
 The state diagram models the lifecycle of a bike path within the BBP system, describing how the status of a path evolves as information is created, validated, updated, and affected by reported conditions or external events. 
 The concept of critical issues that causes a bike path to transition from the Active state to the Degraded state is defined by the presence of obstacles associated with that path. In particular, each obstacle is characterised by a severity attribute, and the overall status of the path is determined by aggregating the severity levels of the obstacles reported by users along the path. When one or more obstacles exceed a predefined severity threshold, the path is considered degraded.
 
 
-\paragraph{bike trip state diagram}
+\paragraph{Bike Trip State Diagram}
 This state diagram models the lifecycle of a bike trip as an information object managed by the system, not merely the physical activity of cycling.
 The distinction between Discarded and Cancelled is conceptual: Discarded refers to trips abandoned before execution and therefore never contributing to historical analytics, while Cancelled refers to trips that were completed and reviewed but are later explicitly removed from the user’s records, without affecting aggregated or anonymised system-level statistics.
 
-
-
-\paragraph{report state diagram}
+\paragraph{Report State Diagram}
 The state diagram models the life cycle of a Report, capturing both manually created and automatically generated reports within a single behavioural model. Although manual and automatic reports follow partially different validation paths, they share the same core states and final outcomes, namely creation, publication, or discard.
 Manual reports are created directly by users and can be published immediately after creation, as their content is explicitly provided and confirmed by the user at the time of insertion. For this reason, manual reports can transition directly from the Created state to the Published state or be discarded without undergoing additional validation steps.
 Automatic reports, instead, are generated by the system based on sensor data collected during a bike trip. Since such data may be inaccurate or misinterpreted, automatic reports must always pass through the Pending state, in which users are required to validate or correct the information before it can be published. Only after successful validation can an automatic report transition to the Published state; otherwise, it may be discarded.
 
 \subsection{Product Functions}
 
-\paragraph{User account management} % TODO: MODIFY TITLE
+\paragraph{User account management}
 The system provides user account management functionalities that allow individuals to register and access the platform as registered users. This enables personalised features such as trip recording, reporting, and notifications, while still allowing non-registered users to access publicly available information.
 
-\paragraph{Trip recording and performance statistics} % TODO: MODIFY TITLE
+\paragraph{Trip recording and performance statistics}
 The system allows registered users to record their cycling trips either manually or automatically. Collected data is stored to build a history of cycling activities, enabling users to review performance statistics such as distance, duration, and average speed, and to analyse their progress over time.
 
-\paragraph{Path browsing and search} % TODO: MODIFY TITLE
+\paragraph{Path browsing and search}
 The system provides an inventory of bike paths that can be browsed and searched by both registered and non-registered users. Publicly available information about paths, including their status and overall conditions, is made accessible to support route exploration and discovery.
 
-\paragraph{Route planning and path recommendation} % TODO: MODIFY TITLE
+\paragraph{Route planning and path recommendation}
 The system supports users in planning their trips by allowing them to specify a departure and a destination. Based on the available information, the system returns a set of possible bike paths, ordered according to their overall score.
 
-\paragraph{Path reporting} % TODO: MODIFY TITLE
+\paragraph{Path reporting}
 The system enables users to contribute information about bike paths by reporting conditions, obstacles, and other relevant details after completing a trip. Reports can be created manually or derived automatically from sensor data collected during the trip, contributing to a richer and more detailed description of bike paths.
 
-\paragraph{Report validation and publication} % TODO: MODIFY TITLE
+\paragraph{Report validation and publication}
 The system allows users to review, confirm, or correct automatically collected information before it is made publicly available. Only validated reports are published, ensuring that shared information about bike paths is reliable and consistent.
 
-\paragraph{User notifications on relevant updates} % TODO: MODIFY TITLE
+\paragraph{User notifications on relevant updates}
 The system provides notifications to users when relevant changes occur, such as updates in weather conditions or the presence of newly reported obstacles affecting planned trips. This allows users to adapt their plans and make informed decisions in a timely manner.
-
-% COPIA INCOLLA \paragraph{*TITOLO PRODUCT FUNCTION*} PER AGGIUNGERE NUOVE PRODUCT FUNCTIONS
 
 \subsection{User Characteristics}
 
