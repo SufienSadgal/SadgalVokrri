@@ -133,3 +133,16 @@ In this screen the user can see his personal information and the number of activ
     \caption{Profile Screen.}
     \label{fig:profile_screen}
 \end{figure}
+
+\subsubsection{Hardware Interfaces}
+The BBP system is a mobile application, requiring only a device with Android or iOS operating system installed. The device must have integrated sensors, GPS and internet access in order to allow the software to properly run.
+
+\subsubsection{Software Interfaces}
+The BBP system relies on the following software interfaces:
+\begin{itemize}
+    \item Weather API: the acquired data about the biking trip is enriched with weather information gathered from an external service.
+    \item Map API: the BBP software must allow the user to visualize his current position in a virtual map, to show on the map different biking trips connecting the departure to the destination point, and allow the user to use the map to navigate through his journey. The application relies on an external map provider to gather geographical information.  
+\end{itemize}
+
+\subsubsection{Communication Interfaces}
+The BBP system as well as gathering external weather and map information, must also query all the needed data about roads, obstacles and registered users from the centralized database. The communication with the back-end must be secure and encrypted, especially for sensitive user data, such as name, surname email and password, so the HTTPS protocol is used. The data is then transferred using the JSON format.
