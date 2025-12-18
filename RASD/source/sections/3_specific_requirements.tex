@@ -141,8 +141,58 @@ The BBP system is a mobile application, requiring only a device with Android or 
 The BBP system relies on the following software interfaces:
 \begin{itemize}
     \item Weather API: the acquired data about the biking trip is enriched with weather information gathered from an external service.
-    \item Map API: the BBP software must allow the user to visualize his current position in a virtual map, to show on the map different biking trips connecting the departure to the destination point, and allow the user to use the map to navigate through his journey. The application relies on an external map provider to gather geographical information.  
+    \item Map API: the BBP software must allow the user to visualize his current position in a virtual map, to show on the map different biking trips connecting the departure to the destination point, and allow the user to use the map to navigate through his journey. The application relies on an external map provider to gather this geographical information.  
 \end{itemize}
 
 \subsubsection{Communication Interfaces}
 The BBP system as well as gathering external weather and map information, must also query all the needed data about roads, obstacles and registered users from the centralized database. The communication with the back-end must be secure and encrypted, especially for sensitive user data, such as name, surname email and password, so the HTTPS protocol is used. The data is then transferred using the JSON format.
+
+\subsection{Functional Requirements}
+
+\paragraph{Account and Access Management}
+\begin{itemize}
+    \item R1: The system shall allow biker to create an account.
+    \item R2: The system shall allow registered users to log in.
+    \item R3: The system shall allow registered users to update information in their profile.
+    \item R4: The system shall allow registered users to delete their account.
+\end{itemize}
+
+\paragraph{Bike Path Discovery and Visualisation}
+\begin{itemize}
+    \item R5: The system shall allow users to browse the inventory of paths,
+    \item R6: The system shall allow users to visualise available bike paths on a map provided by an external map service.
+\end{itemize}
+
+\paragraph{Trip Planning and Route Recommendation}
+\begin{itemize}
+    \item R7: The system shall allow registered users to plan a bike trip by storing it among planned trips,
+    \item R8: The system shall allow the user to specify a starting and ending point in order to retrieve all the possible path between them,
+    \item R9: In case a registered user has provided a departure and a destination point, the system shall return the possible paths ordered based on their scores.
+\end{itemize}
+
+\paragraph{Trip Tracking, History and Performance Analytics}
+\begin{itemize}
+    \item R10: The system shall allow registered users to record their trips.
+    \item R11: The system shall provide registered users with statistics about their cycling performance.
+    \item R12: The system shall allow registered users to view all the non deleted past trips.
+    \item R13: The system shall allow registered users to delete trips from their trip history.
+    \item R14: The system shall allow registered users to enable or disable automatic trip tracking. 
+\end{itemize}
+
+\paragraph{Reporting, Validation and Publication of Path Information}
+\begin{itemize}
+    \item R15: The system shall allow registered users to manually produce a report.
+    \item R16: The system shall allow registered users to automatically produce a report.
+    \item R17: The system shall allow registered users to review and validate reports produced automatically. 
+    \item R18: The system shall allow registered users to publish manual reports.
+    \item R19: The system shall allow registered users to publish validated reports produced automatically.
+\end{itemize}
+
+\paragraph{Context Enrichment and Notifications}
+\begin{itemize}
+    \item R20: The system shall notify registered users with planned trips when relevant weather conditions affecting the trip exceed a predefined severity threshold.
+    *modify class diagram with a new attribute severity of weatherInfo=combination of temperature, wind speed
+    \item R21: The system shall notify registered users with planned trips when obstacles along the associated path exceed a predefined severity threshold. 
+    *we assume that the attribute severity of obstacle is computed as combination of all the reports
+    \item R22: The system shall enrich recorded trips with meteorological information retrieved from an external weather service.
+\end{itemize}
