@@ -28,7 +28,7 @@ In this screen the user can sign in by entering e-mail and password, if already 
 \end{figure}
 
 \paragraph{Home Screen}
-In this screen the registered user can visualize his statistics and all his biking activities. By clicking on an activity, the user can see the details regarding that specific activity, like total distance, average speed, total time, elevation and weather conditions, and also the report of all obstacles encountered during his trip. In this screen the user can also delete the activity by clicking on the trash button (top right corner), after confirmation, or go back to the home page by clicking the back button (top left corner). This screen is reserved to \underline{registered users only}.
+In this screen the registered user can visualize his statistics, the trips he planned and all his biking activities. By clicking on a saved trip, the user can immediately start the navigation of the selected trip, as shown in figure \ref{fig:map_navigation}. By clicking on an activity, the user can see the details regarding that specific activity, like total distance, average speed, total time, elevation and weather conditions, and also the report of all obstacles encountered during his trip. In this screen the user can also delete the activity by clicking on the trash button (top right corner), after confirmation, or go back to the home page by clicking the back button (top left corner). This screen is reserved to \underline{registered users only}.
 
 \begin{figure}[H]
     \centering
@@ -60,7 +60,7 @@ In this screen the registered user can visualize his statistics and all his biki
 In this screen users can browse the map, visualize their current position on the map, by clicking the first button of the floating menu on the bottom left corner, and change the map orientation by clicking to the second button of the floating menu. By inserting a departure and destination point in the first and second input fields respectively, the user can see on the map different paths that lead from the departure point to the destination one. By clicking on a path, the user can see the major obstacles along the way signalled by other users and the score of every segment of the path coded in different colours. 
 
 The following is reserved to \underline{registered users only}.
-When clicking on a path, a floating action button on the bottom right corner appears, so the user can start biking the selected route. Once clicked, the floating action button reveals two options: manual or automatic mode, which let the user choose between manual and automatic insertion of path information respectively. Once an option has been clicked, the navigation starts. The user can stop the recording at any time by clicking on the "\textit{Stop Recording}" button, or add a new obstacle on his way by clicking the bottom right floating action button with the plus sign. 
+When clicking on a path, a switch appears under the input fields, allowing the user to activate automatic data acquisition when cycling. Also a floating action button on the bottom right corner appears, so the user can start biking the selected route. Once clicked, the floating action button reveals two options: "\textit{Save Trip}" or "\textit{Start Trip}", which let the user choose between saving the trip for later cycling sessions, or immediately starting the trip. By pressing the "\textit{Save Trip}" button, the user can visualize his trip in the home screen, shown in figure \ref{fig:home_screen}. By pressing the "\textit{Start Trip}", the user is taken to the navigation page, where he can stop the recording at any time by clicking on the "\textit{Stop Recording}" button, add a new obstacle on his way by clicking the bottom right floating action button with the plus sign. or switch between manual or automatic mode, by clicking the switch in the bottom left corner.
 
 \begin{figure}[H]
     \centering
@@ -191,8 +191,33 @@ The BBP system as well as gathering external weather and map information, must a
 \paragraph{Context Enrichment and Notifications}
 \begin{itemize}
     \item R20: The system shall notify registered users with planned trips when relevant weather conditions affecting the trip exceed a predefined severity threshold.
-    *modify class diagram with a new attribute severity of weatherInfo=combination of temperature, wind speed
-    \item R21: The system shall notify registered users with planned trips when obstacles along the associated path exceed a predefined severity threshold. 
-    *we assume that the attribute severity of obstacle is computed as combination of all the reports
+    \item R21: The system shall notify registered users with planned trips when obstacles along the associated path exceed a predefined severity threshold.
     \item R22: The system shall enrich recorded trips with meteorological information retrieved from an external weather service.
 \end{itemize}
+
+\subsubsection{Use Case Diagram}
+% INVIAMI PURE LA FOTO DEL DIAGRAMMA DA INSERIRE
+\subsubsection{Use Cases}
+
+\paragraph{UC1: } % MODIFICARE TITOLO USECASE
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|l|p{0.75\textwidth}|}
+         \hline
+         Name & inserisci qui il testo (dopo \&)\\
+         \hline
+         Actors &  \\
+         \hline
+         Entry Condition &  \\
+         \hline
+         Event Flow &  \\
+         \hline
+         Exit Condition &  \\
+         \hline
+         Exception &  \\
+         \hline
+    \end{tabular}
+\end{table}
+
