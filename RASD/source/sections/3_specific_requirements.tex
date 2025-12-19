@@ -196,32 +196,129 @@ The BBP system as well as gathering external weather and map information, must a
 \end{itemize}
 
 \subsubsection{Use Case Diagram}
-% INVIAMI PURE LA FOTO DEL DIAGRAMMA DA INSERIRE
-\subsubsection{Use Cases}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\linewidth]{RASD/source/images/UseCaseDiagram.jpeg}
+    \caption{Use Case Diagram.}
+    \label{fig:use_case_diagram}
+\end{figure}
 
-\paragraph{UC1: } % MODIFICARE TITOLO USECASE
+\subsubsection{Use Cases}
+\noindent
+\textbf{UC1: User Registration} 
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.3}
     \begin{tabular}{|l|p{0.75\textwidth}|}
-         \hline
-         Name & inserisci qui il testo (dopo \&)\\
-         \hline
-         Actors &  \\
-         \hline
-         Entry Condition &  \\
-         \hline
-         Event Flow &  \\
-         \hline
-         Exit Condition &  \\
-         \hline
-         Exception &  \\
-         \hline
+        \hline
+        Name & \textbf{User Registration} \\
+        \hline
+        Actors & Non-Registered User. \\
+        \hline
+        Entry Condition & The non-registered user sends his credentials using the form in the sign up screen of the BBP application. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user fills the form in the sign up screen of the BBP application.
+            \item The application locally validates email and password.
+            \item The user requests registration.
+            \item The system validates the data and creates the account.
+         \end{itemize} \\
+        \hline
+        Exit Condition & The user successfully registered to the platform. \\
+        \hline
+        Exception & Account already exists with associated email. \\
+        \hline
+        Security & Privacy/GDPR compliance for personal data handling, password storage \\
+        \hline
+    \end{tabular}
+\end{table}
+
+The credentials are first locally validated to check for errors in the email or password formatting, in order to prevent the server from verifying obviously incorrect emails and the user from choosing passwords which are not strong enough.
+
+\vspace{12pt}
+\noindent
+\textbf{UC2: User Login}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|l|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{User Login} \\
+        \hline
+        Actors & Registered User. \\
+        \hline
+        Entry Condition & A registered account exists. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user fills the form in the sign in screen of the BBP application.
+            \item The user requests the sign in.
+            \item The system authenticates the user and grants access.
+        \end{itemize} \\
+        \hline
+        Exit Condition & The user is authenticated and has access to registered features. \\
+        \hline
+        Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Invalid credentials.
+            \item Account not available (deleted/blocked).
+        \end{itemize} \\
+        \hline
+        Security & Authentication a session handling \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{12pt}
+\noindent
+\textbf{UC3: Update Profile Data}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|l|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Update Profile Data} \\
+        \hline
+        Actors & Registered User. \\
+        \hline
+        Entry Condition & The user is authenticated. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests to update the profile information.
+        \end{itemize} \\
+        \hline
+        Exit Condition & User's profile data is updated. \\
+        \hline
+        Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Invalid credentials.
+            \item Account not available (deleted/blocked).
+        \end{itemize} \\
+        \hline
+        Security & Privacy/GDPR compliance for personal data handling, password storage \\
+        \hline
     \end{tabular}
 \end{table}
 
 \subsubsection{Sequence Diagrams}
+
+\noindent
+\textbf{User Registration}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{RASD/source/images/sd_user_registration.png}
+    \caption{User Registration Sequence Diagram.}
+    \label{fig:user_registration_sd}
+\end{figure}
+
+\noindent
+\textbf{User Log In}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{RASD/source/images/sd_user_login.png}
+    \caption{User Log In Sequence Diagram.}
+    \label{fig:user_login_sd}
+\end{figure}
 
 \subsubsection{Mapping on Requirements}
 
