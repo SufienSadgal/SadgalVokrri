@@ -228,3 +228,35 @@ The BBP system as well as gathering external weather and map information, must a
 \subsection{Performance Requirements}
 The BBP system must ensure that the collected information is available both to registered and non-registered users. Also, the system performs well only if a large amount of registered users decide to publish the information about paths they went through during their biking sessions. That said, the system must support a large number of registered users, publishing a vast amount of data, and it must process all the queries from users concerning paths status and obstacles.
 Given the considerable amount of users and data, the system must be able to easily scale-up while ensuring maximum performance. Another key aspect of BBP is availability: the system must ensure that the data is easily accessible to users and that the requested information is quickly available, all the time. Finally, the system must be capable of processing a large amount of data every time a user compiles a report of the biking trip he cycled.   
+
+\subsection{Design Constraints}
+\subsubsection{Standards Compliance}
+\paragraph{Conformity Standards}
+\begin{itemize}
+    \item GDPR: The system manages users’ personal and administrative data, thus it must be compliant with the General Data Protection Regulation according to the European guidelines.
+    \item ISO/IEC 27001 - Information Security Standard: The system must be characterized by a structured and comprehensive information security management, in order to protect sensitive information and be adaptable to new risks.
+\end{itemize}
+
+\paragraph{Development Standards}
+\begin{itemize}
+    \item ISO/IEC 12207: The system must be compliant to the software lifecycle management standard by applying the best practices in all its main processes.
+\end{itemize}
+
+\subsection{Software Constraints}
+Users access the BBP system via a mobile application, available both for Android and iOS, therefore the software constraints are relative to the mobile device used to access the platform:
+\begin{itemize}
+    \item For Android: the minimum supported version is Android 10 (API 29) for security reasons, as the application works with sensitive data, such as users' location and personal information.
+    \item For iOS: the minimum supported version is iOS 16, according to average iOS requirements.
+\end{itemize}
+
+\subsubsection{Hardware Constraints}
+Users access the BBP system via a mobile application, available both for Android and iOS, therefore the hardware constraints are relative to the mobile device used to access the platform:
+\begin{itemize}
+    \item The device used to access the platform must have a powerful enough processor in order to smoothly visualize GPU intensive data, such as maps. To this end, devices must have:
+    \begin{itemize}
+        \item Android: a quad-core ARMv7 or RM64 CPU architecture, with a clock speed of at least 1.5GHz, and an absolute minimum of 2GB of RAM. Also the device must support OpenGL ES 2.0 or higher, for rendering 3D graphics.
+        \item iOS: at least an A12 Bionic processor and 3GB of RAM.
+    \end{itemize}
+    \item The device used to access the platform must have built-in sensors, such as gyroscope, accelerometer and GPS, in order to gather all the required information about the path and other metrics.
+    \item The device used to access the platform must have a stable internet connection, so the user can retrieve his personal activities, planned trips and statistics. Also an internet connection is crucial for searching routes between the departure and destination points, and the status of each street. Furthermore, the internet connection is necessary to retrieve community shared obstacles and add new obstacles in the report review phase.
+\end{itemize}
