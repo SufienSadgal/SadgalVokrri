@@ -166,7 +166,7 @@ The BBP system as well as gathering external weather and map information, must a
 \paragraph{Trip Planning and Route Recommendation}
 \begin{itemize}
     \item R7: The system shall allow registered users to plan a bike trip by storing it among planned trips,
-    \item R8: The system shall allow the user to specify a starting and ending point in order to retrieve all the possible path between them,
+    \item R8: The system shall allow the user to specify a starting and ending point in order to retrieve all the possible path between them.
     \item R9: In case a registered user has provided a departure and a destination point, the system shall return the possible paths ordered based on their scores.
 \end{itemize}
 
@@ -203,7 +203,7 @@ The BBP system as well as gathering external weather and map information, must a
 
 \begin{table}[H]
     \centering
-    \renewcommand{\arraystretch}{1.2}
+    \renewcommand{\arraystretch}{1.3}
     \begin{tabular}{|l|p{0.75\textwidth}|}
          \hline
          Name & inserisci qui il testo (dopo \&)\\
@@ -242,7 +242,7 @@ Given the considerable amount of users and data, the system must be able to easi
     \item ISO/IEC 12207: The system must be compliant to the software lifecycle management standard by applying the best practices in all its main processes.
 \end{itemize}
 
-\subsection{Software Constraints}
+\subsection{Software Constraints} \label{s: software_constraints}
 Users access the BBP system via a mobile application, available both for Android and iOS, therefore the software constraints are relative to the mobile device used to access the platform:
 \begin{itemize}
     \item For Android: the minimum supported version is Android 10 (API 29) for security reasons, as the application works with sensitive data, such as users' location and personal information.
@@ -260,3 +260,21 @@ Users access the BBP system via a mobile application, available both for Android
     \item The device used to access the platform must have built-in sensors, such as gyroscope, accelerometer and GPS, in order to gather all the required information about the path and other metrics.
     \item The device used to access the platform must have a stable internet connection, so the user can retrieve his personal activities, planned trips and statistics. Also an internet connection is crucial for searching routes between the departure and destination points, and the status of each street. Furthermore, the internet connection is necessary to retrieve community shared obstacles and add new obstacles in the report review phase.
 \end{itemize}
+
+\subsection{Software System Attributes}
+\subsubsection{Reliability}
+The BBP system must preserve a large amount of data retrieved from registered users, thus it should replicate data and ensure its consistency across multiple nodes. Despite the higher financial cost, this solution prevents data loss and enables data recovery. Also, the system periodically runs checksum verification in order to validate stored data against possible corruptions. Furthermore, the system must have a secure multi-factor authentication backdoor access for administrators only, in order to ensure emergency maintenance. Note that, the usage of the backdoor must be monitored and every action reported into a log, so maximum security is guaranteed.
+
+\subsubsection{Availability}
+The BBP system must guarantee a highly available service, quickly accessible through users' mobile devices. The design of the system must ensure 99.9\% (3-nines) of uptime, allowing only a maximum of 9 hours of downtime a year. As already said in the previous section, the system should be partitioned into multiple nodes, to ensure reliability as well as redundancy of the data. In case of node failure, the system must automatically detect it and redirect traffic to running healthy replicas, in order to maintain service continuity. This partition also allows geographical redundancy, for data replication across different physical regions to protect it against localized data centre outages. Finally, the system must implement circuit breakers between components into its design to prevent cascading failures.
+
+\subsubsection{Security}
+The BBP system allows users to sign in and sign up to the platform via email and password. This represents a highly sensitive part of the system, requiring some extra considerations. The password is salted, peppered and hashed with advanced encryption algorithms like \textit{Argon2id}. The salt is randomly generated for every user at registration, then hashed and stored in the database with the encrypted password. The pepper is the same for all users and stored in a secure storage on the users' device. In order to transfer the hashed password and the hashed salt to the back-end in a secure manner, the data is encrypted and transmitted via HTTPS using the TLS 1.3 protocol. Also, the report data sent to the server and the client requested information must be transferred via the HTTPS protocol, to ensure security and consistency.  
+
+\subsubsection{Maintainability}
+The client side of the BBP system consists of a mobile application, so maintainability is crucial. To ensure this software attribute, the mobile application is designed using the Model-View-ViewModel (MVVM) pattern, which makes it easier to separate the UI layer, from the business logic and data layer. Also, the MVVM pattern ensures Unidirectional Data Flow (UDF), decoupling the components that display state in the UI, from the ones that store and modify the state. Also, the application is subdivided into modules, so it is optimized for scalability and maintainability. All the code must be well documented and tested, to maintain a high quality standard.
+
+The server side of the BBP system must be highly modular and ideally adopt a micro-service architecture, so it is more maintainable, testable and scalable. Every component of the server must have a clearly defined API, so it is easier for developers to integrate new components into the system.
+
+\subsubsection{Portability}
+The client side of the BBP system consists of a mobile application, from which users can access the platform. For this reason, the application is compatible with both Android and iOS operating systems (as specified in \ref{s: software_constraints}). The application UI must adapt to different aspect ratios, resolutions and orientations, and also different screen sizes, ranging from 4.7 inches to 12.9 inches. All the users' data is stored and synchronized in the back-end, so it's possible for users to switch from one device to another with ease. Also, users can request to export their data in a standard JSON format so they can move it to a different service.
