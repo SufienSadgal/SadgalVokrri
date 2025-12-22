@@ -204,38 +204,41 @@ The BBP system as well as gathering external weather and map information, must a
 \end{figure}
 
 \subsubsection{Use Cases}
+% -----------------------------------------------------------------------------------------------------------------------
 \noindent
 \textbf{UC1: User Registration} 
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.3}
-    \begin{tabular}{|l|p{0.75\textwidth}|}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
         \hline
         Name & \textbf{User Registration} \\
         \hline
         Actors & Non-Registered User. \\
         \hline
-        Entry Condition & The non-registered user sends his credentials using the form in the sign up screen of the BBP application. \\
+        Entry Condition & The user has access to the BBP system. \\
         \hline
         Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
-            \item The user fills the form in the sign up screen of the BBP application.
-            \item The application locally validates email and password.
-            \item The user requests registration.
+            \item The user requests to create an account.
+            \item The system requests registration data.
+            \item The user provides registration data.
             \item The system validates the data and creates the account.
          \end{itemize} \\
         \hline
         Exit Condition & The user successfully registered to the platform. \\
         \hline
-        Exception & Account already exists with associated email. \\
+        Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Account already exists with associated email.
+            \item Provided data is invalid.
+        \end{itemize} \\
         \hline
-        Security & Privacy/GDPR compliance for personal data handling, password storage \\
+        Special Requirements & Privacy: GDPR compliance for personal data handling, password storage \\
         \hline
     \end{tabular}
 \end{table}
 
-The credentials are first locally validated to check for errors in the email or password formatting, in order to prevent the server from verifying obviously incorrect emails and the user from choosing passwords which are not strong enough.
-
+% -----------------------------------------------------------------------------------------------------------------------
 \vspace{12pt}
 \noindent
 \textbf{UC2: User Login}
@@ -243,7 +246,7 @@ The credentials are first locally validated to check for errors in the email or 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.3}
-    \begin{tabular}{|l|p{0.75\textwidth}|}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
         \hline
         Name & \textbf{User Login} \\
         \hline
@@ -252,31 +255,33 @@ The credentials are first locally validated to check for errors in the email or 
         Entry Condition & A registered account exists. \\
         \hline
         Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
-            \item The user fills the form in the sign in screen of the BBP application.
-            \item The user requests the sign in.
+            \item The user requests to log in.
+            \item The system requests credentials.
+            \item The user provides credentials.
             \item The system authenticates the user and grants access.
         \end{itemize} \\
         \hline
         Exit Condition & The user is authenticated and has access to registered features. \\
         \hline
         Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
-            \item Invalid credentials.
             \item Account not available (deleted/blocked).
+            \item Invalid credentials.
         \end{itemize} \\
         \hline
-        Security & Authentication a session handling \\
+        Special Requirements & Security: Authentication and session handling \\
         \hline
     \end{tabular}
 \end{table}
 
-\vspace{12pt}
+% -----------------------------------------------------------------------------------------------------------------------
+\newpage
 \noindent
 \textbf{UC3: Update Profile Data}
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.3}
-    \begin{tabular}{|l|p{0.75\textwidth}|}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
         \hline
         Name & \textbf{Update Profile Data} \\
         \hline
@@ -285,20 +290,326 @@ The credentials are first locally validated to check for errors in the email or 
         Entry Condition & The user is authenticated. \\
         \hline
         Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
-            \item The user requests to update the profile information.
+            \item The user requests to update profile information.
+            \item The system displays current profile data (conceptually: makes them available for editing).
+            \item The user submits updated data.
+            \item The system validates and stores the updates.
         \end{itemize} \\
         \hline
         Exit Condition & User's profile data is updated. \\
         \hline
         Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
-            \item Invalid credentials.
-            \item Account not available (deleted/blocked).
+            \item Invalid new profile information.
         \end{itemize} \\
         \hline
-        Security & Privacy/GDPR compliance for personal data handling, password storage \\
+        Special Requirements & Privacy: GDPR compliance for personal data handling, password storage \\
         \hline
     \end{tabular}
 \end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\vspace{12pt}
+\noindent
+\textbf{UC4: Delete Account}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Delete Account} \\
+        \hline
+        Actors & Registered User. \\
+        \hline
+        Entry Condition & The user is authenticated. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests account deletion.
+            \item The system performs the deletion according to retention rules.
+            \item The system revokes access.
+        \end{itemize} \\
+        \hline
+        Exit Condition & The account is deleted and the user becomes non-registered. \\
+        \hline
+        Exception & \\
+        \hline
+        Special Requirements & Privacy: GDPR compliance for personal data handling, password storage \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\newpage
+\noindent
+\textbf{UC5: Browse Bike Paths}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Delete Account} \\
+        \hline
+        Actors & \begin{enumerate}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item User (Registered or not).
+            \item External Map Service, External Weather Service.
+        \end{enumerate} \\
+        \hline
+        Entry Condition & The user has access to the BBP system \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests to explore available bike paths.
+            \item (Optional) The user provides departure–destination points.
+            \item The system retrieves the matching paths.
+            \item The system provides path information (status, score, obstacles/reports summary).
+            \item (Optional) The system retrieves and shows map representation via the external map service.
+            \item (Optional) The system retrieves and shows weather information for the relevant area/time.
+        \end{itemize} \\
+        \hline
+        Exit Condition & The user explores available paths and their information. \\
+        \hline
+        Exception & No paths match the request. \\
+        \hline
+        Special Requirements & Compatibility: interoperability with external services (map/weather systems). \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\newpage
+\noindent
+\textbf{UC6: Plan Trips}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Plan Trips} \\
+        \hline
+        Actors & \begin{enumerate}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Registered User.
+            \item External Map Service, External Weather Service.
+        \end{enumerate} \\
+        \hline
+        Entry Condition & The user is authenticated. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests to plan a new trip.
+            \item The user selects a bike path
+            \item The system stores the trip in the planned trips list.
+            \item (Optional) The system enriches the planned trip with available weather information.
+        \end{itemize} \\
+        \hline
+        Exit Condition & A planned trip is stored and managed by the system. \\
+        \hline
+        Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Selected path becomes unavailable during planning.
+            \item System error preventing trip storage.
+        \end{itemize} \\
+        \hline
+        Special Requirements & Performance: time behaviour.\\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\vspace{12pt}
+\noindent
+\textbf{UC7: Change Automatic Tracking Settings}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Change Automatic Tracking Settings} \\
+        \hline
+        Actors & \begin{enumerate}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Registered User.
+            \item User Device (sensors and GPS).
+        \end{enumerate} \\
+        \hline
+        Entry Condition & he user is authenticated. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests to enable or disable automatic trip tracking.
+            \item The system stores the user’s tracking preference.
+            \item (If enabling) the system requests to collect sensor/GPS data.
+        \end{itemize} \\
+        \hline
+        Exit Condition & Tracking preference is updated. \\
+        \hline
+        Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item User device does not support required sensors.
+            \item User denies required permissions/consent.
+        \end{itemize} \\
+        \hline
+        Special Requirements & Privacy: explicit consent for location/sensor tracking. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\newpage
+\noindent
+\textbf{UC8: View History and Statistics of Completed Trips}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{View History and Statistics of Completed Trips} \\
+        \hline
+        Actors & Registered User \\
+        \hline
+        Entry Condition & he user is authenticated.\\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests access to trip history.
+            \item The system retrieves all non-deleted completed trips.
+            \item The user selects a trip.
+            \item The system provides the trip details and related statistics.
+        \end{itemize} \\
+        \hline
+        Exit Condition & The user has reviewed past trips and their statistics\\
+        \hline
+        Exception & No trips exist in the history\\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\vspace{12pt}
+\noindent
+\textbf{UC9: Delete Trips from History}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Delete Trips from History} \\
+        \hline
+        Actors & Registered User. \\
+        \hline
+        Entry Condition & The user is authenticated and at least one trip exists in history. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests deletion of a specific past trip.
+            \item The system removes the trip from the user’s history (marks as deleted).
+            \item The system updates any aggregated views/metrics to exclude deleted trips.
+        \end{itemize} \\
+        \hline
+        Exit Condition & The selected trip is deleted from history. \\
+        \hline
+        Special Requirements & Data Consistency: deleted trips must not appear in global statistics and history views. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\newpage
+\noindent
+\textbf{UC10: Manual Report}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Manual Report} \\
+        \hline
+        Actors & Registered User. \\
+        \hline
+        Entry Condition & A trip has been completed. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The user requests to create a manual report about a planned bike path.
+            \item The user provides report data (conditions, obstacles, notes) and request the publication
+            \item The system stores the report and publishes it as public path information.
+        \end{itemize} \\
+        \hline
+        Exit Condition & A manual report is published and contributes to path enrichment. \\
+        \hline
+        Exceptions & Report data is invalid or incomplete. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\vspace{12pt}
+\noindent
+\textbf{UC11: Automatic Report}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Automatic Report} \\
+        \hline
+        Actors & \begin{enumerate}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Registered User. 
+            \item User's Device (data source).
+        \end{enumerate} \\
+        \hline
+        Entry Condition & A trip has been recorded with automatic tracking enabled. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The system generates an automatic report from collected trip data.
+            \item The user requests to review the generated report.
+            \item The user possibly corrects the report and confirm it
+            \item The system marks the report as validated
+            \item The user confirms the report and requests the publication
+            \item The system publishes the report.
+        \end{itemize} \\
+        \hline
+        Exit Condition & A validated automatic report is published. \\
+        \hline
+        Exceptions & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Automatic tracking was not enabled: no automatic report exists.
+            \item User discards the report: the report is not published.
+        \end{itemize} \\
+        \hline
+        Special requirements & Reliability: fault tolerance (incomplete data coming from device sensors).\\
+        \hline
+    \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------------------------------------------------
+\newpage
+\noindent
+\textbf{UC12: Receive Trip Alerts}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Name & \textbf{Receive Trip Alerts} \\
+        \hline
+        Actors & \begin{enumerate}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item Registered User. 
+            \item External Weather Service, Other (reporting) Users.
+        \end{enumerate} \\
+        \hline
+        Entry Condition & At least one planned trip exists. \\
+        \hline
+        Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item The system detects relevant changes affecting a planned trip (e.g., adverse weather severity threshold exceeded; obstacle severity threshold exceeded).
+            \item The system notifies the user.
+        \end{itemize} \\
+        \hline
+        Exit Condition & The user receives the alert information \\
+        \hline
+        Exceptions & External weather service unavailable (weather alerts may be delayed/unavailable). \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
 
 \subsubsection{Sequence Diagrams}
 
@@ -311,6 +622,7 @@ The credentials are first locally validated to check for errors in the email or 
     \label{fig:sd_registration}
 \end{figure}
 
+\newpage
 \noindent
 \textbf{User Log In}
 \begin{figure}[H]
@@ -329,6 +641,7 @@ The credentials are first locally validated to check for errors in the email or 
     \label{fig:sd_profile_update}
 \end{figure}
 
+\newpage
 \noindent
 \textbf{Delete Account}
 \begin{figure}[H]
@@ -347,6 +660,7 @@ The credentials are first locally validated to check for errors in the email or 
     \label{fig:sd_browse_bike_paths}
 \end{figure}
 
+\newpage
 \noindent
 \textbf{Plan Trip}
 \begin{figure}[H]
@@ -365,11 +679,12 @@ The credentials are first locally validated to check for errors in the email or 
     \label{fig:sd_change_sensor_preferences}
 \end{figure}
 
+\newpage
 \noindent
 \textbf{View Trip Details and Statistics}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{RASD//source//images//diagrams/sd_trip_details.png}
+    \includegraphics[width=0.4\linewidth]{RASD//source//images//diagrams/sd_trip_details.png}
     \caption{View Trip Details Sequence Diagram.}
     \label{fig:sd_trip_details}
 \end{figure}
@@ -383,6 +698,7 @@ The credentials are first locally validated to check for errors in the email or 
     \label{fig:sd_delete_trip}
 \end{figure}
 
+\newpage
 \noindent
 \textbf{Manual Report}
 \begin{figure}[H]
@@ -396,16 +712,17 @@ The credentials are first locally validated to check for errors in the email or 
 \textbf{Automatic Report}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{RASD//source//images//diagrams/sd_automatic_report.png}
+    \includegraphics[width=0.4\linewidth]{RASD//source//images//diagrams/sd_automatic_report.png}
     \caption{Manual Report Sequence Diagram.}
     \label{fig:sd_automatic_report}
 \end{figure}
 
+\newpage
 \noindent
 \textbf{Receive Trip Alerts}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\linewidth]{RASD//source//images//diagrams/sd_trip_alert.png}
+    \includegraphics[width=0.9\linewidth]{RASD//source//images//diagrams/sd_trip_alert.png}
     \caption{Receive Trip Alerts Sequence Diagram.}
     \label{fig:sd_trip_alerts}
 \end{figure}
