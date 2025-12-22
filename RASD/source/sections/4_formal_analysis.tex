@@ -1,1 +1,24 @@
 \section{Formal Analysis}
+* screen code
+
+
+The domain is modelled using a state-based approach that explicitly captures the evolution of the system over time. To this purpose, the Alloy library util/ordering[State] is imported, which introduces a total ordering over the State signature. This allows each system configuration to be represented as a distinct state in time and provides built-in relations such as first, last, next, and prev, enabling the specification of temporal constraints and irreversible behaviours (e.g., terminal states). 
+
+Bike paths are modelled with an explicit status (Active, Degraded, Unavailable, Deleted) and a clear separation between the inventory of available paths and deleted ones. A key invariant enforces that only non-deleted paths appear in the system inventory, while deleted paths are terminal: once a path is marked as Deleted, it remains deleted in all future states and can never be reintroduced. This reflects the assumption that path removals are permanent and irreversible.
+
+Trips are modelled from the perspective of registered users and are divided into planned, recorded, and deleted trips. Strong constraints ensure that these categories are mutually exclusive: a trip cannot be simultaneously planned and recorded, nor planned and deleted. Each planned trip has at most one owner, preventing ambiguous ownership. Deletions are also terminal: once a trip is deleted, it remains deleted in all future states and is excluded from the user’s visible history. This allows the model to faithfully represent the lifecycle of a trip from planning, to completion, and possible removal from the user’s statistics.
+
+Reports are distinguished into manual and automatic, each governed by a specific workflow. All reports are well-formed: they are produced by exactly one registered user, refer to exactly one recorded trip (completed trip), and have a single status. Automatic reports must be validated by exactly one registered user before they can be published, enforcing the goal that automatically collected information is reviewed prior to public release. Both discarded and published reports are terminal states, meaning their status cannot change in future states. Manual reports, instead, bypass validation and can only move from draft to published or discarded, reflecting their different creation process.
+
+Alerts represent system-driven notifications related to planned trips. Each alert is associated with exactly one planned trip and can only be sent to the registered user who owns that trip. Specialized alerts (weather or obstacle alerts) are further linked to valid WeatherInfo or Obstacle entities. This ensures that notifications are always meaningful, contextualized, and consistent with the current planning state of the user.
+Overall, the choice to model the domain as a sequence of ordered states enables the precise expression of temporal and lifecycle constraints that are central to the system’s behavior. Irreversible actions (such as deletions, publications, or discards), ownership constraints, and validation workflows are naturally captured through state evolution, resulting in a coherent and expressive formalization of the domain.
+
+* screen check inventory
+
+The introduced function nonDeletedPaths explicitly defines the set of bike paths that are not marked as Deleted in a given system state. The assertion G6_InventoryEqualsAllNonDeletedPaths verifies that, for every state of the system, the inventory of available bike paths exactly corresponds to this set. The absence of counterexamples in the Alloy check provides evidence that the modelled inventory is consistent with the intended semantics: deleted paths are never exposed to users, while all non-deleted paths are always included in the inventory. Consequently, the assertion supports Goal G6 by ensuring that accessible bike path information is correctly derived from the path status and remains coherent across state evolutions.
+
+
+
+*screen RU’s history 
+
+The function visibleHistory defines the set of trips that are effectively visible to a registered user by excluding deleted trips from the set of recorded ones. The assertion G1_VisibleHistoryWellFormed verifies two key properties: first, that deleted trips never appear in the user’s visible history, and second, that the visible history contains only completed trips, i.e. it is always a subset of the recorded trips. The Alloy check produced no counterexamples within the given scope, confirming that the modeled history is consistent and well-formed in every system state. This result supports Goal G1 by ensuring that users can reliably track their past cycling activities without inconsistencies caused by deleted records.
