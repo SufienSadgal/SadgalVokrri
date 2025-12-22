@@ -348,7 +348,7 @@ The BBP system as well as gathering external weather and map information, must a
     \renewcommand{\arraystretch}{1.3}
     \begin{tabular}{|p{0.25\textwidth}|p{0.75\textwidth}|}
         \hline
-        Name & \textbf{Delete Account} \\
+        Name & \textbf{Browse Bike Paths} \\
         \hline
         Actors & \begin{enumerate}[topsep=0pt, partopsep=0pt, leftmargin=*]
             \item User (Registered or not).
@@ -405,7 +405,6 @@ The BBP system as well as gathering external weather and map information, must a
         \hline
         Exception & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
             \item Selected path becomes unavailable during planning.
-            \item System error preventing trip storage.
         \end{itemize} \\
         \hline
         Special Requirements & Performance: time behaviour.\\
@@ -430,7 +429,7 @@ The BBP system as well as gathering external weather and map information, must a
             \item User Device (sensors and GPS).
         \end{enumerate} \\
         \hline
-        Entry Condition & he user is authenticated. \\
+        Entry Condition & The user is authenticated. \\
         \hline
         Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
             \item The user requests to enable or disable automatic trip tracking.
@@ -464,7 +463,7 @@ The BBP system as well as gathering external weather and map information, must a
         \hline
         Actors & Registered User \\
         \hline
-        Entry Condition & he user is authenticated.\\
+        Entry Condition & The user is authenticated.\\
         \hline
         Event Flows & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
             \item The user requests access to trip history.
@@ -569,7 +568,6 @@ The BBP system as well as gathering external weather and map information, must a
         Exit Condition & A validated automatic report is published. \\
         \hline
         Exceptions & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
-            \item Automatic tracking was not enabled: no automatic report exists.
             \item User discards the report: the report is not published.
         \end{itemize} \\
         \hline
