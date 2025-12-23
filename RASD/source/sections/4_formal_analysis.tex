@@ -1,16 +1,100 @@
 \section{Formal Analysis}
 The domain is modelled using a state-based approach that explicitly captures the evolution of the system over time. To this purpose, the Alloy library \code{util/ordering[State]} is imported, which introduces a total ordering over the \code{State} signature. This allows each system configuration to be represented as a distinct state in time and provides built-in relations such as \code{first}, \code{last}, \code{next}, and \code{prev}, enabling the specification of temporal constraints and irreversible behaviours (e.g., terminal states). 
 
-Bike paths are modelled with an explicit status (\code{Active}, \code{Degraded}, \code{Unavailable}, \code{Deleted}) and a clear separation between the inventory of available paths and deleted ones. A key invariant enforces that only non-deleted paths appear in the system inventory, while deleted paths are terminal: once a path is marked as Deleted, it remains deleted in all future states and can never be reintroduced. This reflects the assumption that path removals are permanent and irreversible.
+\begin{lstlisting}[caption=State Signature.]
+// Allows to define the concept of "evolution in time", 
+// in particular we have an entity State that represent the state 
+// of the system in a certain instant. 
+// With this module (util/..) Alloy provides automatically some features like 
+// first, last, next and prev which are relations of State automatically 
+// generated that represent the first, last, next and previous state.
+open util/ordering[State]
+
+// State is an entity that represents the state of the system
+sig State {
+    // set of all available paths (= inventory)
+    paths: set BikePath,
+
+    // status of a certain path (BikePath = inventory + deleted paths), 
+    pathStatus: BikePath -> one PathStatus,
+
+    // set of all planned trips
+    planned: RegisteredUser -> set Trip,
+
+    // trips already performed by the user
+    recorded: RegisteredUser -> set Trip,	
+
+    // set of trips completed by the user 
+    // but deleted from the history (history = recorded - deleted)
+    deleted:  RegisteredUser -> set Trip,
+
+    trackingEnabled: set RegisteredUser,
+
+    reports: set Report,
+    producedBy: reports -> one RegisteredUser,
+    aboutTrip: reports -> one Trip,
+    status: reports -> one ReportStatus,
+    validatedBy: AutoReport -> lone RegisteredUser,
+
+    tripWeather: Trip -> lone WeatherInfo,
+
+    obstaclesOnPath: BikePath -> set Obstacle,
+
+    alertsSent: RegisteredUser -> set Alert,
+
+    gpsEnabled: set RegisteredUser,
+    connected: set User,
+    mapServiceUp: one Bool,
+    weatherServiceUp: one Bool
+}
+\end{lstlisting}
+
+Bike paths are modelled with an explicit status (\code{Active}, \code{Degraded}, \code{Unavailable}, \code{Deleted}) and a clear separation between the inventory of available paths and deleted ones. A key invariant enforces that only non-deleted paths appear in the system inventory, while deleted paths are terminal: once a path is marked as \code{Deleted}, it remains deleted in all future states and can never be reintroduced. This reflects the assumption that path removals are permanent and irreversible.
+
+\begin{lstlisting}[caption=Bike Path Signature.]
+sig BikePath {}
+
+enum PathStatus { Active, Degraded, Unavailable, Deleted }
+\end{lstlisting}
 
 Trips are modelled from the perspective of registered users and are divided into planned, recorded, and deleted trips. Strong constraints ensure that these categories are mutually exclusive: a trip cannot be simultaneously planned and recorded, nor planned and deleted. Each planned trip has at most one owner, preventing ambiguous ownership. Deletions are also terminal: once a trip is deleted, it remains deleted in all future states and is excluded from the user’s visible history. This allows the model to faithfully represent the lifecycle of a trip from planning, to completion, and possible removal from the user’s statistics.
 
+\begin{lstlisting}[caption=Trip Signature.]
+sig BikePath {}
+sig Point {}
+
+sig Trip {
+    path: one BikePath
+}
+\end{lstlisting}
+
 Reports are distinguished into manual and automatic, each governed by a specific workflow. All reports are well-formed: they are produced by exactly one registered user, refer to exactly one recorded trip (completed trip), and have a single status. Automatic reports must be validated by exactly one registered user before they can be published, enforcing the goal that automatically collected information is reviewed prior to public release. Both discarded and published reports are terminal states, meaning their status cannot change in future states. Manual reports, instead, bypass validation and can only move from draft to published or discarded, reflecting their different creation process.
 
-Alerts represent system-driven notifications related to planned trips. Each alert is associated with exactly one planned trip and can only be sent to the registered user who owns that trip. Specialized alerts (weather or obstacle alerts) are further linked to valid \code{WeatherInfo} or \code{Obstacle} entities. This ensures that notifications are always meaningful, contextualized, and consistent with the current planning state of the user.
-Overall, the choice to model the domain as a sequence of ordered states enables the precise expression of temporal and lifecycle constraints that are central to the system’s behaviour. Irreversible actions (such as deletions, publications, or discards), ownership constraints, and validation workflows are naturally captured through state evolution, resulting in a coherent and expressive formalization of the domain.
+\begin{lstlisting}[caption=Report Signature.]
+abstract sig Report {}
+sig ManualReport extends Report {}
+sig AutoReport extends Report {}
 
-* screen check inventory
+enum ReportStatus { Draft, Validated, Published, Discarded }
+\end{lstlisting}
+
+Alerts represent system-driven notifications related to planned trips. Each alert is associated with exactly one planned trip and can only be sent to the registered user who owns that trip. Specialized alerts (weather or obstacle alerts) are further linked to valid \code{WeatherInfo} or \code{Obstacle} entities. This ensures that notifications are always meaningful, contextualized, and consistent with the current planning state of the user.
+
+\begin{lstlisting}[caption=Alert Signature.]
+abstract sig Alert {
+    plan: one Trip
+}
+
+sig WeatherAlert extends Alert {
+    info: one WeatherInfo
+}
+
+sig ObstacleAlert extends Alert {
+    obstacle: one Obstacle
+}
+\end{lstlisting}
+
+Overall, the choice to model the domain as a sequence of ordered states enables the precise expression of temporal and lifecycle constraints that are central to the system’s behaviour. Irreversible actions (such as deletions, publications, or discards), ownership constraints, and validation workflows are naturally captured through state evolution, resulting in a coherent and expressive formalization of the domain.
 
 The introduced function \code{nonDeletedPaths} explicitly defines the set of bike paths that are not marked as \code{Deleted} in a given system state. The assertion \code{G6\_InventoryEqualsAllNonDeletedPaths} verifies that, for every state of the system, the inventory of available bike paths exactly corresponds to this set. The absence of counterexamples in the Alloy check provides evidence that the modelled inventory is consistent with the intended semantics: deleted paths are never exposed to users, while all non-deleted paths are always included in the inventory. Consequently, the assertion supports Goal \code{G6} by ensuring that accessible bike path information is correctly derived from the path status and remains coherent across state evolutions.
 
@@ -23,3 +107,196 @@ In the second transition ($s_1 \to s_2$), the predicate captures the system’s 
 
 Finally, in the last transition ($s_2 \to s_3$), the predicate models trip completion. The trip \code{t} is removed from the user’s planned trips and added to the recorded set, representing a completed cycling activity. This enforces the conceptual separation between planned and completed trips and demonstrates how the system updates the user’s history once the trip is performed.
 Overall, the generated instance visually confirms the correctness of the modelled process: a trip is first planned, then monitored through alerts while planned, and finally recorded upon completion. The predicate therefore provides a clear and concrete validation of the planning workflow and its integration with alerting and trip lifecycle management within the system.
+
+\begin{lstlisting}[caption=Complete Alloy Formalization.]
+// Allows to define the concept of "evolution in time", 
+// in particular we have an entity State that represent the state 
+// of the system in a certain instant. 
+// With this module (util/..) Alloy automatically provides some features like 
+// first, last, next and prev which are relations of State that 
+// represent the first, last, next and previous state.
+open util/ordering[State]
+
+abstract sig Report {}
+sig ManualReport extends Report {}
+sig AutoReport extends Report {}
+
+enum ReportStatus { Draft, Validated, Published, Discarded }
+enum Severity { Low, Medium, High }
+enum PathStatus { Active, Degraded, Unavailable, Deleted }
+
+sig WeatherInfo {
+    severity: one Severity
+}
+
+sig Obstacle {
+    severity: one Severity
+}
+
+abstract sig Alert {
+    plan: one Trip
+}
+
+sig WeatherAlert extends Alert {
+    info: one WeatherInfo
+}
+
+sig ObstacleAlert extends Alert {
+    obstacle: one Obstacle
+}
+
+// True or False values in order to represent the fact that the map service
+// or the weather service is available or not
+abstract sig Bool {}
+one sig True extends Bool {}
+one sig False extends Bool {}
+
+// State is an entity that represents the state of the system
+sig State {
+    // set of all available paths (= inventory)
+    paths: set BikePath,
+
+    // status of a certain path (BikePath = inventory + deleted paths), 
+    pathStatus: BikePath -> one PathStatus,
+
+    // set of all planned trips
+    planned: RegisteredUser -> set Trip,
+
+    // trips already performed by the user
+    recorded: RegisteredUser -> set Trip,	
+
+    // set of trips completed by the user 
+    // but deleted from the history (history = recorded - deleted)
+    deleted:  RegisteredUser -> set Trip,
+
+    trackingEnabled: set RegisteredUser,
+
+    reports: set Report,
+    producedBy: reports -> one RegisteredUser,
+    aboutTrip: reports -> one Trip,
+    status: reports -> one ReportStatus,
+    validatedBy: AutoReport -> lone RegisteredUser,
+
+    tripWeather: Trip -> lone WeatherInfo,
+    obstaclesOnPath: BikePath -> set Obstacle,
+    alertsSent: RegisteredUser -> set Alert,
+
+    gpsEnabled: set RegisteredUser,
+    connected: set User,
+    mapServiceUp: one Bool,
+    weatherServiceUp: one Bool
+}
+
+fact PartitionUsers {
+    // 2 entities that extend the same abstract entity 
+    // are by default disjointed
+    User = RegisteredUser + UnregisteredUser
+}
+
+fact DomainAssumptions {
+    all s: State | {
+        s.gpsEnabled = RegisteredUser
+        s.connected = User
+        s.mapServiceUp = True
+        s.weatherServiceUp = True
+    }
+}
+
+fact InventoryShowsOnlyNonDeletedPaths {
+    all s: State | all p: BikePath | (p in s.paths) iff 
+    (s.pathStatus[p] != Deleted)	
+}
+
+// Once a path is deleted it cannot be re-introduced in the inventory
+fact DeletedPathIsTerminal {
+    all s: State | all p: BikePath | (s.pathStatus[p] = Deleted) implies 
+    all s2: s.*ordering/next | s2.pathStatus[p] = Deleted
+}
+
+// Once a trip is deleted, it will stay deleted forever 
+// (so it will not be shown in the history of the RU)
+fact DeletedTripsAreTerminal {
+    all s: State, s2: s.*ordering/next | s.deleted in s2.deleted
+}
+
+// The history of the RU shows only non deleted trips
+fact DeletedTripsNotInHistory {
+    all s: State, u: RegisteredUser | no (s.recorded[u] & s.deleted[u])
+}
+
+fact ReportsWellFormed {
+    all s: State | {
+        // Each report is produced by exactly one RU
+        all r: s.reports | one s.producedBy[r]
+        // Each report refers to exactly one trip
+        all r: s.reports | one s.aboutTrip[r]
+        // Each report has exactly one status
+        all r: s.reports | one s.status[r]
+        // The report must refer to a recorded trip of the producing user
+        all r: s.reports | s.aboutTrip[r] in s.recorded[s.producedBy[r]]	
+    }
+}
+
+fact AutoReportValidationWorkflow {
+    all s: State | all r: AutoReport & s.reports | {
+        // If the report is validated or published 
+        // it must have exactly one validator
+        (s.status[r] in Validated + Published) implies one s.validatedBy[r]	
+    }
+    
+    // If the report is discarded then it must stay discarded forever
+    all s: State | all r: AutoReport & s.reports | (s.status[r] = Discarded) 
+    implies all s2: s.*ordering/next | s2.status[r] = Discarded	
+
+    all s: State | all r: AutoReport & s.reports | (s.status[r] = Published) 
+    implies all s2: s.*ordering/next | s2.status[r] = Published
+}
+
+fact ManualReportWorkflow {
+    // For all the manual reports in the current state, 
+    // if they have a different status then they are validated 
+    // (so draft or published)
+    all s: State | all r: ManualReport & s.reports | s.status[r] 
+    not in Validated				
+
+    all s: State | all r: ManualReport & s.reports | 
+    (s.status[r] = Published) implies 
+    all s2: s.*ordering/next | s2.status[r] = Published
+
+    all s: State | all r: ManualReport & s.reports | 
+    (s.status[r] = Discarded) implies 
+    all s2: s.*ordering/next | s2.status[r] = Discarded
+}
+
+fact PublicationRequiresExistence {
+    // If the report is published then it must exists in the current state
+    all s: State | all r: s.reports | (s.status[r] = Published) 
+    implies (r in s.reports)	
+}
+
+fact TripWeatherOnlyForTripsInTheInventory {
+    // If at least one trip has available weather info...
+    all s: State | all t: Trip | some s.tripWeather[t] 
+    // ... then the trip is associated with a path in the inventory 
+    // and the external weather service is available
+    implies	(t.path in s.paths and s.weatherServiceUp = True)	
+}
+
+// A trip can only be planned or recorded (once performed become recorded)
+fact PlannedAndRecordedAreDisjoint {
+    all s: State, u: RegisteredUser | no (s.planned[u] & s.recorded[u])
+    all s: State, u: RegisteredUser | no (s.planned[u] & s.deleted[u])
+}
+
+fact PlannedTripHasSingleOwner {
+    all s: State, t: Trip | lone (s.planned.t)		
+}
+
+// An alert can be sent only to a RU 
+// and must refer to one of that user's planned trips
+fact AlertsWellFormed {
+    all s: State, u: RegisteredUser, a: Alert | (a in s.alertsSent[u]) 
+    implies (a.plan in s.planned[u])
+}
+
+\end{lstlisting}
