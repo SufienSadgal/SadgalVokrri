@@ -748,6 +748,95 @@ The BBP system as well as gathering external weather and map information, must a
 \end{figure}
 
 \subsubsection{Mapping on Requirements}
+G1: Registered Users are able to keep track of their cycling activities over time.
+Functional Requirements
+R10: The system shall allow registered users to record their trips.
+R11: The system shall provide registered users with statistics about their cycling performance.
+R12: The system shall allow registered users to view all the non deleted past trips.
+R13: The system shall allow registered users to delete trips from their trip history.
+
+Domain Assumptions
+D2: Users’ devices have accelerometer and gyroscope sensors.
+D3: Data gathered from devices’ sensors is accurate.
+D4: Users consent to enable and share their GPS location.
+
+“keep track of their cycling activities over time” means that:
+- each trip performed by the RU is characterised by a set of statistics coming from the GPS
+- the RU is able to access those statistics for each completed trip
+
+G2: Information about bike paths is continuously enriched based on registered users’ cycling activities and reports.
+Functional Requirements
+R14: The system shall allow registered users to enable or disable automatic trip tracking.
+R15: The system shall allow registered users to manually produce a report.
+R16: The system shall allow registered users to automatically produce a report.
+R18: The system shall allow registered users to publish manual reports.
+R19: The system shall allow registered users to publish validated reports produced automatically.
+Domain Assumptions
+D1: Users aim to provide truthful and accurate information when reporting.
+D2: Users’ devices have accelerometer and gyroscope sensors.
+D3: Data gathered from devices’ sensors is accurate.
+D4: Users consent to enable and share their GPS location.
+D10: A sufficient number of users actively contribute reports.
+
+
+G3: Automatically collected information about bike paths is validated by registered users before being made public.
+Functional Requirements
+R16: The system shall allow registered users to automatically produce a report.
+R17: The system shall allow registered users to review and validate reports produced automatically.
+R19: The system shall allow registered users to publish validated reports produced automatically.
+Domain Assumptions
+D1. Users aim to provide truthful and accurate information when reporting bike path conditions
+D3. Data gathered from devices’ sensors is accurate.
+
+
+G4: Registered users are provided with statistics about their cycling performance.
+Functional Requirements
+R11: The system shall provide registered users with statistics about their cycling performance.
+R14: The system shall allow registered users to enable or disable automatic trip tracking.
+Domain Assumptions
+D2: Users’ devices have accelerometer and gyroscope sensors.
+D3: Data gathered from devices’ sensors is accurate.
+D4: Users consent to enable and share their GPS location.
+
+
+
+
+
+G5: Trip data is enriched with meteorological information.
+Functional Requirements
+R22: The system shall enrich recorded trips with meteorological information retrieved from an external weather service.
+Domain Assumptions
+D8: The external weather service reliably responds to requests.
+D9: The meteorological information gathered is accurate.
+
+G6: Bike path information is accessible to both registered and unregistered users.
+Functional Requirements
+R5: The system shall allow users to browse the inventory of paths.
+R6: The system shall allow users to visualise available bike paths on a map provided by an external map service.
+R8: The system shall allow the user to specify a starting and ending point in order to retrieve all the possible path between them.
+R9: In case a user has provided a departure and a destination point, the system shall return the possible paths ordered based on their scores.
+Domain Assumptions
+D6: The external map service reliably responds with geographical data.
+D7: The geographical information gathered from the external map service is accurate.
+
+
+G7: Users are supported in selecting suitable bike paths.
+Functional Requirements
+R5: The system shall allow users to browse the inventory of paths.
+R6: The system shall allow users to visualise available bike paths on a map. 
+R8: The system shall allow the user to specify a starting and ending point to retrieve possible paths.
+R9: The system shall return the possible paths ordered based on their scores.
+R20: The system shall notify registered users with planned trips when relevant weather conditions affecting the trip exceed a predefined severity threshold.
+R21: The system shall notify registered users with planned trips when obstacles along the associated path exceed a predefined severity threshold.
+R22: The system shall enrich recorded trips with meteorological information retrieved from an external weather service
+
+Domain Assumptions
+D6: The external map service reliably responds with geographical data.
+D7: The geographical information gathered from the external map service is accurate.
+D8. The external weather service reliably responds with meteorological data when the BBP system sends the request.
+D9. The meteorological information gathered from the external weather service is accurate.
+
+
 
 \subsection{Performance Requirements}
 The BBP system must ensure that the collected information is available both to registered and non-registered users. Also, the system performs well only if a large amount of registered users decide to publish the information about paths they went through during their biking sessions. That said, the system must support a large number of registered users, publishing a vast amount of data, and it must process all the queries from users concerning paths status and obstacles.
