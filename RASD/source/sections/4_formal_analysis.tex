@@ -160,6 +160,11 @@ check G1_VisibleHistoryWellFormed for
 The predicate \code{showPlanningWeatherAlertAndCompletion} is used to illustrate, through a concrete execution trace, the lifecycle of a biking trip from planning to completion, including the interaction with the weather alert mechanism. By exploiting the \code{util/ordering[State]} module, the predicate explicitly constrains four consecutive system states ($s_0, s_1, s_2, s_3$), allowing the evolution of the system to be observed step by step.
 In the first transition ($s_0 \to s_1$), the predicate models the planning phase: a trip \code{t}, initially absent from the planned trips of a registered user \code{u}, is added to \code{u}’s planned set. This transition represents the moment in which the user schedules a trip, making it an explicit system-managed entity. The visualization clearly shows the appearance of the planned relationship between the \code{RegisteredUser} and the \code{Trip} in \code{State1}, marking the successful completion of the planning action.
 
+*screen G3
+
+The assertion G3_AutoReportsValidatedBeforePublication formalizes Goal G3 by enforcing three critical constraints on the lifecycle of reports. First, it ensures that every automatically generated report that reaches the Published state has been validated by exactly one registered user. Second, it guarantees that once an automatic report is marked as Discarded, its status remains immutable in all future system states. Third, it enforces immutability for all published reports—both manual and automatic—preventing any further state changes after publication.
+The absence of counterexamples gives us confidence about the fact that all three properties consistently hold across every possible execution trace. 
+
 \begin{lstlisting}
 pred showPlanningWeatherAlertAndCompletion {
     some u: RegisteredUser, t: Trip, a: WeatherAlert, 
