@@ -138,7 +138,8 @@ assert G1_VisibleHistoryWellFormed {
         // the RU's history
         no (visibleHistory[s,u] & s.deleted[u])		
 
-        // visible history contains only completed trips (i.e., subset of recorded)
+        // visible history contains only completed trips 
+        // (i.e., subset of recorded)
         visibleHistory[s,u] in s.recorded[u]
     }
 }
@@ -157,15 +158,35 @@ check G1_VisibleHistoryWellFormed for
       0 Obstacle
 \end{lstlisting}
 
-The predicate \code{showPlanningWeatherAlertAndCompletion} is used to illustrate, through a concrete execution trace, the lifecycle of a biking trip from planning to completion, including the interaction with the weather alert mechanism. By exploiting the \code{util/ordering[State]} module, the predicate explicitly constrains four consecutive system states ($s_0, s_1, s_2, s_3$), allowing the evolution of the system to be observed step by step.
-In the first transition ($s_0 \to s_1$), the predicate models the planning phase: a trip \code{t}, initially absent from the planned trips of a registered user \code{u}, is added to \code{u}’s planned set. This transition represents the moment in which the user schedules a trip, making it an explicit system-managed entity. The visualization clearly shows the appearance of the planned relationship between the \code{RegisteredUser} and the \code{Trip} in \code{State1}, marking the successful completion of the planning action.
-
-*screen G3
-
-The assertion G3_AutoReportsValidatedBeforePublication formalizes Goal G3 by enforcing three critical constraints on the lifecycle of reports. First, it ensures that every automatically generated report that reaches the Published state has been validated by exactly one registered user. Second, it guarantees that once an automatic report is marked as Discarded, its status remains immutable in all future system states. Third, it enforces immutability for all published reports—both manual and automatic—preventing any further state changes after publication.
+The assertion \code{G3\_AutoReportsValidatedBeforePublication} formalizes Goal G3 by enforcing three critical constraints on the lifecycle of reports. First, it ensures that every automatically generated report that reaches the Published state has been validated by exactly one registered user. Second, it guarantees that once an automatic report is marked as Discarded, its status remains immutable in all future system states. Third, it enforces immutability for all published reports—both manual and automatic—preventing any further state changes after publication.
 The absence of counterexamples gives us confidence about the fact that all three properties consistently hold across every possible execution trace. 
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Assertion for Goal G3.]
+assert G3_AutoReportsValidatedBeforePublication {
+    all s: State | {    
+        // (1) If an automatic report is Published, 
+        // it must have exactly one RegisteredUser validator
+        all r: AutoReport & s.reports | (s.status[r] = Published) 
+        implies (one s.validatedBy[r])
+    
+        // (2) If an automatic report is Discarded, 
+        // it never changes status in any future state
+        all r: AutoReport & s.reports | (s.status[r] = Discarded) 
+        implies all s2: s.*ordering/next | s2.status[r] = Discarded
+    
+        // (3) If a report (manual or automatic) is Published, 
+        // it never changes status in any future state
+        all r: s.reports | (s.status[r] = Published) 
+        implies all s2: s.*ordering/next | s2.status[r] = Published
+    }
+}
+
+check G3_AutoReportsValidatedBeforePublication for 6 but 8 State    
+\end{lstlisting}
+
+The predicate \code{showPlanningWeatherAlertAndCompletion} is used to illustrate, through a concrete execution trace, the lifecycle of a biking trip from planning to completion, including the interaction with the weather alert mechanism. By exploiting the \code{util/ordering[State]} module, the predicate explicitly constrains four consecutive system states ($s_0, s_1, s_2, s_3$), allowing the evolution of the system to be observed step by step.
+
+\begin{lstlisting}[caption=Predicate showing Trip Lifecycle.]
 pred showPlanningWeatherAlertAndCompletion {
     some u: RegisteredUser, t: Trip, a: WeatherAlert, 
     s0, s1, s2, s3: State | {
@@ -200,6 +221,8 @@ pred showPlanningWeatherAlertAndCompletion {
 
 run showPlanningWeatherAlertAndCompletion for 1 but 4 State
 \end{lstlisting}
+
+In the first transition ($s_0 \to s_1$), the predicate models the planning phase: a trip \code{t}, initially absent from the planned trips of a registered user \code{u}, is added to \code{u}’s planned set. This transition represents the moment in which the user schedules a trip, making it an explicit system-managed entity. The visualization clearly shows the appearance of the planned relationship between the \code{RegisteredUser} and the \code{Trip} in \code{State1}, marking the successful completion of the planning action.
 
 In the second transition ($s_1 \to s_2$), the predicate captures the system’s reactive behaviour: once the trip is planned and the weather service is available, a \code{WeatherAlert} is generated and sent to the same user. The alert is explicitly linked to the planned trip \code{t} via the plan relation and enriched with weather information (\code{a.info}). This step highlights how planned trips enable proactive system behaviour, such as monitoring external conditions and notifying users of relevant issues.
 
@@ -240,6 +263,7 @@ Overall, the generated instance visually confirms the correctness of the modelle
     \label{fig:placeholder}
 \end{figure}
 
+\newpage
 \subsection{Complete Alloy Formalization}
 
 \begin{lstlisting}[caption=Complete Alloy Formalization.]
@@ -267,7 +291,6 @@ sig Obstacle {
 abstract sig Alert {
     plan: one Trip
 }
-
 
 sig WeatherAlert extends Alert {
     info: one WeatherInfo
@@ -384,7 +407,6 @@ fact AutoReportValidationWorkflow {
     implies all s2: s.*ordering/next | s2.status[r] = Published
 }
 
-
 fact ManualReportWorkflow {
     // For all the manual reports in the current state, 
     // if they have a different status then they are validated 
@@ -442,8 +464,6 @@ fun nonDeletedPaths[s: State]: set BikePath {
 assert G6_InventoryEqualsAllNonDeletedPaths {
     all s: State | s.paths = nonDeletedPaths[s]
 }
-
-
 
 check G6_InventoryEqualsAllNonDeletedPaths for
       3 State,
