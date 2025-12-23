@@ -1,4 +1,5 @@
 \section{Formal Analysis}
+\subsection{Signatures}
 The domain is modelled using a state-based approach that explicitly captures the evolution of the system over time. To this purpose, the Alloy library \code{util/ordering[State]} is imported, which introduces a total ordering over the \code{State} signature. This allows each system configuration to be represented as a distinct state in time and provides built-in relations such as \code{first}, \code{last}, \code{next}, and \code{prev}, enabling the specification of temporal constraints and irreversible behaviours (e.g., terminal states). 
 
 \begin{lstlisting}[caption=State Signature.]
@@ -60,9 +61,6 @@ enum PathStatus { Active, Degraded, Unavailable, Deleted }
 Trips are modelled from the perspective of registered users and are divided into planned, recorded, and deleted trips. Strong constraints ensure that these categories are mutually exclusive: a trip cannot be simultaneously planned and recorded, nor planned and deleted. Each planned trip has at most one owner, preventing ambiguous ownership. Deletions are also terminal: once a trip is deleted, it remains deleted in all future states and is excluded from the user’s visible history. This allows the model to faithfully represent the lifecycle of a trip from planning, to completion, and possible removal from the user’s statistics.
 
 \begin{lstlisting}[caption=Trip Signature.]
-sig BikePath {}
-sig Point {}
-
 sig Trip {
     path: one BikePath
 }
@@ -85,6 +83,7 @@ abstract sig Alert {
     plan: one Trip
 }
 
+
 sig WeatherAlert extends Alert {
     info: one WeatherInfo
 }
@@ -96,25 +95,152 @@ sig ObstacleAlert extends Alert {
 
 Overall, the choice to model the domain as a sequence of ordered states enables the precise expression of temporal and lifecycle constraints that are central to the system’s behaviour. Irreversible actions (such as deletions, publications, or discards), ownership constraints, and validation workflows are naturally captured through state evolution, resulting in a coherent and expressive formalization of the domain.
 
-The introduced function \code{nonDeletedPaths} explicitly defines the set of bike paths that are not marked as \code{Deleted} in a given system state. The assertion \code{G6\_InventoryEqualsAllNonDeletedPaths} verifies that, for every state of the system, the inventory of available bike paths exactly corresponds to this set. The absence of counterexamples in the Alloy check provides evidence that the modelled inventory is consistent with the intended semantics: deleted paths are never exposed to users, while all non-deleted paths are always included in the inventory. Consequently, the assertion supports Goal \code{G6} by ensuring that accessible bike path information is correctly derived from the path status and remains coherent across state evolutions.
+\subsection{Functions, Predicates and Assertions}
+The introduced function \code{nonDeletedPaths} explicitly defines the set of bike paths that are not marked as \code{Deleted} in a given system state. The assertion \code{G6\_InventoryEqualsAllNonDeletedPaths} verifies that, for every state of the system, the inventory of available bike paths exactly corresponds to this set. The absence of counterexamples in the Alloy check provides evidence that the modelled inventory is consistent with the intended semantics: deleted paths are never exposed to users, while all non-deleted paths are always included in the inventory. Consequently, the assertion supports Goal G6 by ensuring that accessible bike path information is correctly derived from the path status and remains coherent across state evolutions.
 
-The function \code{visibleHistory} defines the set of trips that are effectively visible to a registered user by excluding deleted trips from the set of recorded ones. The assertion \newline \code{G1\_VisibleHistoryWellFormed} verifies two key properties: first, that deleted trips never appear in the user’s visible history, and second, that the visible history contains only completed trips, i.e. it is always a subset of the recorded trips. The Alloy check produced no counterexamples within the given scope, confirming that the modelled history is consistent and well-formed in every system state. This result supports Goal \code{G1} by ensuring that users can reliably track their past cycling activities without inconsistencies caused by deleted records.
+\begin{lstlisting}[caption=Assertion for Goal G6.]
+// Return the set of non-deleted paths in a given state s
+fun nonDeletedPaths[s: State]: set BikePath {
+    { p: BikePath | s.pathStatus[p] != Deleted }
+}
+
+// Check if inventory in state s is the same as the set of non-deleted paths 
+// in a given state s (retuned by the function)
+assert G6_InventoryEqualsAllNonDeletedPaths {
+    all s: State | s.paths = nonDeletedPaths[s]
+}
+
+check G6_InventoryEqualsAllNonDeletedPaths for
+      3 State,
+      1 RegisteredUser,
+      1 UnregisteredUser,
+      7 BikePath,
+      2 Point,
+      6 Trip,
+      0 Report,
+      0 WeatherInfo,
+      0 Obstacle,
+      0 Alert
+\end{lstlisting}
+
+The function \code{visibleHistory} defines the set of trips that are effectively visible to a registered user by excluding deleted trips from the set of recorded ones. The assertion \newline \code{G1\_VisibleHistoryWellFormed} verifies two key properties: first, that deleted trips never appear in the user’s visible history, and second, that the visible history contains only completed trips, i.e. it is always a subset of the recorded trips. The Alloy check produced no counterexamples within the given scope, confirming that the modelled history is consistent and well-formed in every system state. This result supports Goal G1 by ensuring that users can reliably track their past cycling activities without inconsistencies caused by deleted records.
+
+\begin{lstlisting}[caption=Assertion for Goal G1.]
+fun visibleHistory[s: State, u: RegisteredUser]: set Trip {
+    s.recorded[u] - s.deleted[u]
+}
+
+assert G1_VisibleHistoryWellFormed {
+    all s: State, u: RegisteredUser | {
+        // no "deleted trips" appear in the visible history
+        // it's trivial because we have defined visibleHistory as 
+        // the difference, but we need to show the consistency of 
+        // the RU's history
+        no (visibleHistory[s,u] & s.deleted[u])		
+
+        // visible history contains only completed trips (i.e., subset of recorded)
+        visibleHistory[s,u] in s.recorded[u]
+    }
+}
+
+check G1_VisibleHistoryWellFormed for
+      3 State,
+      2 User,
+      2 RegisteredUser,
+      0 UnregisteredUser,
+      4 Trip,
+      2 BikePath,
+      2 Point,
+      0 Report,
+      0 Alert,
+      0 WeatherInfo,
+      0 Obstacle
+\end{lstlisting}
 
 The predicate \code{showPlanningWeatherAlertAndCompletion} is used to illustrate, through a concrete execution trace, the lifecycle of a biking trip from planning to completion, including the interaction with the weather alert mechanism. By exploiting the \code{util/ordering[State]} module, the predicate explicitly constrains four consecutive system states ($s_0, s_1, s_2, s_3$), allowing the evolution of the system to be observed step by step.
 In the first transition ($s_0 \to s_1$), the predicate models the planning phase: a trip \code{t}, initially absent from the planned trips of a registered user \code{u}, is added to \code{u}’s planned set. This transition represents the moment in which the user schedules a trip, making it an explicit system-managed entity. The visualization clearly shows the appearance of the planned relationship between the \code{RegisteredUser} and the \code{Trip} in \code{State1}, marking the successful completion of the planning action.
+
+\begin{lstlisting}
+pred showPlanningWeatherAlertAndCompletion {
+    some u: RegisteredUser, t: Trip, a: WeatherAlert, 
+    s0, s1, s2, s3: State | {
+        // consecutive states
+        s1 = s0.next
+        s2 = s1.next
+        s3 = s2.next
+        
+        // (1) planning: t is added to planned trips of u
+        t not in s0.planned[u]
+        t in     s1.planned[u]
+        
+        // (2) weather alert: alert sent to u about the planned trip t
+        a not in s1.alertsSent[u]
+        a in     s2.alertsSent[u]
+        a.plan = t
+        some a.info
+        s2.weatherServiceUp = True
+        
+        // ensure it is indeed a planned trip at alert time 
+        // (coherent with AlertsWellFormed)
+        t in s2.planned[u]
+        
+        // (3) completion: trip becomes recorded (and is no longer planned)
+        t in     s2.planned[u]
+        t not in s2.recorded[u]
+        
+        t not in s3.planned[u]
+        t in     s3.recorded[u]
+    }
+}
+
+run showPlanningWeatherAlertAndCompletion for 1 but 4 State
+\end{lstlisting}
 
 In the second transition ($s_1 \to s_2$), the predicate captures the system’s reactive behaviour: once the trip is planned and the weather service is available, a \code{WeatherAlert} is generated and sent to the same user. The alert is explicitly linked to the planned trip \code{t} via the plan relation and enriched with weather information (\code{a.info}). This step highlights how planned trips enable proactive system behaviour, such as monitoring external conditions and notifying users of relevant issues.
 
 Finally, in the last transition ($s_2 \to s_3$), the predicate models trip completion. The trip \code{t} is removed from the user’s planned trips and added to the recorded set, representing a completed cycling activity. This enforces the conceptual separation between planned and completed trips and demonstrates how the system updates the user’s history once the trip is performed.
 Overall, the generated instance visually confirms the correctness of the modelled process: a trip is first planned, then monitored through alerts while planned, and finally recorded upon completion. The predicate therefore provides a clear and concrete validation of the planning workflow and its integration with alerting and trip lifecycle management within the system.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{RASD/source/images/alloy/alloy_s0.jpeg}
+    \caption{State 0.}
+    \label{fig:alloy_s0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{RASD/source/images/alloy/alloy_s1.jpeg}
+    \caption{State 1.}
+    \label{fig:alloy_s1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{RASD/source/images/alloy/alloy_s2.jpeg}
+    \caption{State 2.}
+    \label{fig:alloy_s2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{RASD/source/images/alloy/alloy_s3.jpeg}
+    \caption{State 3.}
+    \label{fig:alloy_s3}
+    \end{subfigure}
+    
+    \caption{Alloy States Visualization.}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsection{Complete Alloy Formalization}
+
 \begin{lstlisting}[caption=Complete Alloy Formalization.]
 // Allows to define the concept of "evolution in time", 
 // in particular we have an entity State that represent the state 
-// of the system in a certain instant. 
-// With this module (util/..) Alloy automatically provides some features like 
-// first, last, next and prev which are relations of State that 
-// represent the first, last, next and previous state.
+// of the system in a certain instant.
 open util/ordering[State]
 
 abstract sig Report {}
@@ -136,6 +262,7 @@ sig Obstacle {
 abstract sig Alert {
     plan: one Trip
 }
+
 
 sig WeatherAlert extends Alert {
     info: one WeatherInfo
@@ -252,6 +379,7 @@ fact AutoReportValidationWorkflow {
     implies all s2: s.*ordering/next | s2.status[r] = Published
 }
 
+
 fact ManualReportWorkflow {
     // For all the manual reports in the current state, 
     // if they have a different status then they are validated 
@@ -299,4 +427,113 @@ fact AlertsWellFormed {
     implies (a.plan in s.planned[u])
 }
 
+// Return the set of non-deleted paths in a given state s
+fun nonDeletedPaths[s: State]: set BikePath {
+    { p: BikePath | s.pathStatus[p] != Deleted }
+}
+
+// Check if inventory in state s is the same as the set of non-deleted paths 
+// in a given state s (retuned by the function)
+assert G6_InventoryEqualsAllNonDeletedPaths {
+    all s: State | s.paths = nonDeletedPaths[s]
+}
+
+
+
+check G6_InventoryEqualsAllNonDeletedPaths for
+      3 State,
+      1 RegisteredUser,
+      1 UnregisteredUser,
+      7 BikePath,
+      2 Point,
+      6 Trip,
+      0 Report,
+      0 WeatherInfo,
+      0 Obstacle,
+      0 Alert
+
+      fun visibleHistory[s: State, u: RegisteredUser]: set Trip {
+    s.recorded[u] - s.deleted[u]
+}
+
+assert G1_VisibleHistoryWellFormed {
+    all s: State, u: RegisteredUser | {
+        // no "deleted trips" appear in the visible history
+        // it's trivial because we have defined visibleHistory as 
+        // the difference, but we need to show the consistency of 
+        // the RU's history
+        no (visibleHistory[s,u] & s.deleted[u])		
+
+        // visible history contains only completed trips (i.e., subset of recorded)
+        visibleHistory[s,u] in s.recorded[u]
+    }
+}
+
+check G1_VisibleHistoryWellFormed for
+      3 State,
+      2 User,
+      2 RegisteredUser,
+      0 UnregisteredUser,
+      4 Trip,
+      2 BikePath,
+      2 Point,
+      0 Report,
+      0 Alert,
+      0 WeatherInfo,
+      0 Obstacle
+
+assert G3_AutoReportsValidatedBeforePublication {
+    all s: State | {    
+        // (1) If an automatic report is Published, 
+        // it must have exactly one RegisteredUser validator
+        all r: AutoReport & s.reports | (s.status[r] = Published) 
+        implies (one s.validatedBy[r])
+    
+        // (2) If an automatic report is Discarded, 
+        // it never changes status in any future state
+        all r: AutoReport & s.reports | (s.status[r] = Discarded) 
+        implies all s2: s.*ordering/next | s2.status[r] = Discarded
+    
+        // (3) If a report (manual or automatic) is Published, 
+        // it never changes status in any future state
+        all r: s.reports | (s.status[r] = Published) 
+        implies all s2: s.*ordering/next | s2.status[r] = Published
+    }
+}
+
+check G3_AutoReportsValidatedBeforePublication for 6 but 8 State
+
+pred showPlanningWeatherAlertAndCompletion {
+    some u: RegisteredUser, t: Trip, a: WeatherAlert, 
+    s0, s1, s2, s3: State | {
+        // consecutive states
+        s1 = s0.next
+        s2 = s1.next
+        s3 = s2.next
+        
+        // (1) planning: t is added to planned trips of u
+        t not in s0.planned[u]
+        t in     s1.planned[u]
+        
+        // (2) weather alert: alert sent to u about the planned trip t
+        a not in s1.alertsSent[u]
+        a in     s2.alertsSent[u]
+        a.plan = t
+        some a.info
+        s2.weatherServiceUp = True
+        
+        // ensure it is indeed a planned trip at alert time 
+        // (coherent with AlertsWellFormed)
+        t in s2.planned[u]
+        
+        // (3) completion: trip becomes recorded (and is no longer planned)
+        t in     s2.planned[u]
+        t not in s2.recorded[u]
+        
+        t not in s3.planned[u]
+        t in     s3.recorded[u]
+    }
+}
+
+run showPlanningWeatherAlertAndCompletion for 1 but 4 State
 \end{lstlisting}
