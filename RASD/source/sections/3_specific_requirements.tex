@@ -236,6 +236,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Privacy: GDPR compliance for personal data handling, password storage \\
         \hline
     \end{tabular}
+    \caption{UC1: User Registration}
+    \label{tab:uc1}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -271,6 +273,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Security: Authentication and session handling \\
         \hline
     \end{tabular}
+    \caption{UC2: User Login}
+    \label{uc2}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -305,6 +309,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Privacy: GDPR compliance for personal data handling, password storage \\
         \hline
     \end{tabular}
+    \caption{UC3: Update Profile Data}
+    \label{uc3}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -336,6 +342,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Privacy: GDPR compliance for personal data handling, password storage \\
         \hline
     \end{tabular}
+    \caption{UC4: Delete Account}
+    \label{uc4}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -373,6 +381,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Compatibility: interoperability with external services (map/weather systems). \\
         \hline
     \end{tabular}
+    \caption{UC5: Browse Bike Paths}
+    \label{uc5}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -410,6 +420,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Performance: time behaviour.\\
         \hline
     \end{tabular}
+    \caption{UC6: Plan Trips}
+    \label{uc6}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -447,6 +459,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Privacy: explicit consent for location/sensor tracking. \\
         \hline
     \end{tabular}
+    \caption{UC7: Change Automatic Tracking Settings}
+    \label{uc7}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -477,6 +491,8 @@ The BBP system as well as gathering external weather and map information, must a
         Exception & No trips exist in the history\\
         \hline
     \end{tabular}
+    \caption{UC8: View History and Statistics of Completed Trips}
+    \label{uc8}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -506,6 +522,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special Requirements & Data Consistency: deleted trips must not appear in global statistics and history views. \\
         \hline
     \end{tabular}
+    \caption{UC9: Delete Trips from History}
+    \label{uc9}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -535,6 +553,8 @@ The BBP system as well as gathering external weather and map information, must a
         Exceptions & Report data is invalid or incomplete. \\
         \hline
     \end{tabular}
+    \caption{UC10: Manual Report}
+    \label{uc10}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -574,6 +594,8 @@ The BBP system as well as gathering external weather and map information, must a
         Special requirements & Reliability: fault tolerance (incomplete data coming from device sensors).\\
         \hline
     \end{tabular}
+    \caption{UC11: Automatic Report}
+    \label{uc11}
 \end{table}
 
 % -----------------------------------------------------------------------------------------------------------------------
@@ -605,9 +627,9 @@ The BBP system as well as gathering external weather and map information, must a
         Exceptions & External weather service unavailable (weather alerts may be delayed/unavailable). \\
         \hline
     \end{tabular}
+    \caption{UC12: Receive Trip Alerts}
+    \label{uc12}
 \end{table}
-
-
 
 \subsubsection{Sequence Diagrams}
 
@@ -724,7 +746,6 @@ The BBP system as well as gathering external weather and map information, must a
     \caption{Receive Trip Alerts Sequence Diagram.}
     \label{fig:sd_trip_alerts}
 \end{figure}
-
 
 \subsubsection{Mapping on Requirements}
 
