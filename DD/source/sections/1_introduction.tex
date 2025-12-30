@@ -1,0 +1,59 @@
+\section{Introduction}
+\subsection{Purpose} % ------------------------------------------------------------------
+The \textit{Best Bike Paths} (\textit{BBP}) system has one objective in mind: support the ever-growing cycling community by providing a platform for recording, browsing, and sharing optimal bike routes. By integrating automated data acquisition from mobile sensors with manual user contributions, BBP builds a reliable inventory of safe and smooth paths. It enhances the biking experience by offering detailed performance statistics and real-time meteorological information on the go. Furthermore, BBP promotes safety by automatically identifying physical road hazards through community-verified data, which non-registered users can also benefit from. By prioritizing routes where speed limits and traffic density are bike-friendly, it promotes a safer environment for riders of all skill levels. Through its dual-mode insertion and analytical scoring, BBP becomes a comprehensive tool for both personal fitness and community navigation.
+
+\subsection{Scope} % ------------------------------------------------------------------
+The core function of Best Bike Paths (BBP) is to collect, integrate, and provide reliable information about bike paths in order to support cyclists in making informed decisions about the routes they choose to follow. The system acts as a mediator between real-world bike path conditions, cyclists’ experiences and reports, and external data sources such as meteorological services.
+Through BBP, users can contribute with information about bike path conditions, validate data automatically collected by the system, and explore available routes based on their suitability and current conditions. Registered users can record their trips, delete old trips,  manually or automatically report obstacles or unsafe situations, confirm or correct detected information, and publish validated data to the community. Unregistered users can access publicly available information but are not allowed to contribute or modify data.
+The system interacts with external weather services to retrieve environmental data and enrich trip information. It also integrates with mobile devices to receive sensor data, such as GPS traces and accelerometer readings,that may indicate relevant path features or anomalies. BBP maintains a consolidated and continuously updated view of bike path conditions by merging contributions from multiple users according to their freshness, reliability, and level of confirmation.
+
+\subsection{Definitions, Acronyms, Abbreviations} % ------------------------------------------------------------------
+\subsubsection{Definitions}
+\begin{itemize}
+    \item Software: ordered set of instructions that tells the computer how to use the available data to perform the tasks it is designed to carry out.
+    \item Biking Trip: journey performed by bike over a period of time following a predetermined route.
+    \item External Service: software outside the application’s domain, consumed and relied upon by the primary application in order to perform the actions it is designed to execute.
+    \item Obstacle: something, possibly dangerous, that hinders the biking trip or might block the route. Some examples of obstacles may be potholes, tree branches on the route, roadworks or road closures.
+    \item Accelerometer: electronic sensor that measures the acceleration of the device.
+    \item Gyroscope: electronic sensor that measures the orientation and angular velocity of the device.
+    \item GPS (Global Positioning System): system using satellite orbiting the earth to obtain the device’s location. 
+\end{itemize}
+
+\subsubsection{Acronyms}
+\begin{itemize}
+    \item BBP: Best Bike Paths.
+    \item GPS: Global Positioning System.
+    \item UI: User Interface.
+\end{itemize}
+
+\subsubsection{Abbreviations}
+\begin{itemize}
+    \item G: goal.
+    \item WP: World Phenomena.
+    \item SP: Shared Phenomena.
+\end{itemize}
+
+\subsection{Revision history}
+\begin{itemize}
+    \item Version 1.0: 23/12/2025
+\end{itemize}
+
+\subsection{Reference Documents} % ------------------------------------------------------------------
+The assignment for this document and all the information included refer to the following
+documentation:
+\begin{itemize}
+    \item The specification for the 2025/26 Requirement Engineering and Design Project for the Software Engineering II course.
+    \item The slides on the WeBeep page of the Software Engineering II course.
+    \item The Requirement Analysis and Specification Document.
+\end{itemize}
+
+\subsection{Document Structure} % ------------------------------------------------------------------
+\begin{enumerate}
+    \item Introduction: it aims to give a brief description of the project. In particular it’s focused on the reasons and the goals that are going to be achieved with its development, as previously explained in the RASD.
+    \item Architectural Design: describes at different levels of granularity the system design implementation.
+    \item User Interface Design: shows the wire-frames that constitutes the platform UI.
+    \item Requirements Traceability: explains how the goals defined in the previous document are satisfied by the interaction between the requirements and the component described in this document.
+    \item Implementation, Integration and Test Plan: provides a description of the implementation integration and testing details, useful for the developers and producer of the platform;
+    \item Effort Spent: shows the effort spent to write this document.
+    \item References: contains the references to any documents and software used to write this paper.
+\end{enumerate}
