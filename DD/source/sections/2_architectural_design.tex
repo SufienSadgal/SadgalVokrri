@@ -53,13 +53,45 @@ The centralized data tier simplifies consistency requirements, such as ensuring 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{DD/source/images/diagrams/Detailed System View.png}
+    \includegraphics[width=0.7\linewidth]{DD/source/images/diagrams/Detailed System View.png}
     \caption{A more detailed view of the BBP system architecture.}
     \label{fig:detailed_system_view}
 \end{figure}
 
-
 \subsection{Component View}
+As already mentioned in the previous section, the BBP system adopts a 3-tier architecture, where the application layer is composed of micro-service components interacting with each other and with external services. 
+
+\subsubsection{Front-end Components}
+\paragraph{Mobile Application}
+The mobile application is the component responsible for showing the user interface, through which users can interact with the platform. Every interaction of the user with the application triggers a request to the beck-end of the system via HTTPS via the API gateway. Also, this component is responsible for gathering all the required data from the device sensors and GPS, which are directly processed on the server.
+
+Note that, while registered users have full access of all the platform functionalities, non-registered ones have access only to the path exploration service. The mobile application takes into consideration those limitations and displays to non-registered users only the screens they have access to.
+
+\subsubsection{Back-end}
+\paragraph{User Management Component} 
+This component acts as the centralized authority for identity and access management. It handles the complete lifecycle of the user, such as registration, authentication and credential management, and session control. Also, it allows users to modify their profile information, change their preferences and completely delete their account. All these functionalities are provided to the user while ensuring compliance with the GDPR-related policies and privacy regulations.
+
+\paragraph{Path Exploration Service} 
+This component acts as a central catalogue for all bike path information: more specifically, it allows the user to browse all the available bike paths in a given area, filter them by preference, retrieve path status and obstacles, and search for bike paths connecting a given departure point to a destination one sorted by their score. In general, this component is responsible for managing the lifecycle of all the structural data regarding bike paths and obstacle tracking. 
+
+\paragraph{Trip Management Service}
+This component is responsible for managing the lifecycle of trip data for both planned and completed ones. It implements soft deletion mechanisms to ensure data integrity and view consistency without permanent data loss. Additionally, this service computes performance statistics, such as distance, duration, average speed and other metrics. Crucially, the service enforces strict data isolation, ensuring that trip details and statistics are accessible exclusively to the user who created them.
+
+\paragraph{Report Management Service}
+This component manages the lifecycle of the report entities, distinguishing them between manual and automatic, also differentiating their specific workflows:
+\begin{itemize}
+    \item Manual reports undergo a direct creation and publication process.
+    \item Automatic reports follow a strict validation pipeline (\code{draft} $\to$ \code{validated} $\to$ \code{published}).
+\end{itemize}
+
+Upon publication, the service triggers an update to synchronize and expose the public information of the associated path.
+
+\paragraph{Map \& Weather Integration Adapters}
+
+
+
+\paragraph{Data Tier}
+
 
 \subsection{Deployment View}
 
