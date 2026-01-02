@@ -120,8 +120,31 @@ This component is a third-party meteorological data provider used by the platfor
 This component is the physical hardware interface and operating system services of the user's mobile device. It serves as the primary source of telemetry, continuously generating geolocation coordinates (via GPS) and motion sensor data. Crucially, it enforces operating system-level security, ensuring that the application can only access this sensitive hardware if the user has explicitly granted the necessary runtime permissions.
 
 \subsection{Deployment View}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{DD//source//images//diagrams/System Deployment View.png}
+    \caption{System Deployment View.}
+    \label{fig:system_deployment_view}
+\end{figure}
 
-\subsection{Runtime View}
+\paragraph{Mobile Device}
+The device is used by the BBP users to access the platform, via the mobile application. The user is required to download the application from centralized distribution channels like Google Play Store (for Android) or App Store (for iOS), in order to interact with the system. Also, the device is responsible for gathering all the GPS and sensor data, required for the correct functioning of certain features of the application. 
 
-\subsection{Component Interfaces}
+All data exchange between the mobile client and the server infrastructure is encapsulated over HTTPS, passing through a load balancer, for high availability, and firewalls, for robust security. Requests are finalized at the API Gateway, which acts as the single entry point for the back-end, handling request routing, rate limiting, and authentication before passing data to the internal application servers.
+
+\paragraph{Load Balancer}
+The load balancer acts as a reverse proxy, distributing incoming network traffic across the servers that constitute the application layer. Its primary purpose is to ensure high availability and reliability by preventing that a single server may become a point of failure or a performance bottleneck, slowing down the entire system.
+
+\paragraph{Firewall}
+The firewall is a network security system that acts as a protective barrier between the trusted internal network (BBP platform back-end) and the untrusted external network. Its primary purpose is to monitor and control incoming and outgoing traffic based on predetermined security rules to prevent unauthorized access and block malicious data. Notoriously, the deep packet inspection required by the firewall represents a potential performance bottleneck. Therefore, the firewall is strategically positioned after the load balancer to reduce the volume of packets it has to inspect.
+
+\paragraph{Application Server}
+The application server handles all the incoming requests from users interacting with the platform via the mobile application. It is responsible for processing data sent by the client and ensures data persistence by interacting with the DBMS via TCP/IP. It also integrates information coming from external services with which it communicates via HTTPS.
+
+\paragraph{Database Management System Server}
+The database runs on a clustered architecture to ensure high availability and data consistency. This configuration guarantees that all nodes maintain identical dataset and that the application server is updated with the latest information, preventing errors caused by data mismatches between nodes.
+
+% \subsection{Runtime View}
+
+% \subsection{Component Interfaces}
 
