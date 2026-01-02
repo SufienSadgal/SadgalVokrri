@@ -63,11 +63,9 @@ As already mentioned in the previous section, the BBP system adopts a 3-tier arc
 
 \subsubsection{Front-end Components}
 \paragraph{Mobile Application}
-The mobile application is the component responsible for showing the user interface, through which users can interact with the platform. Every interaction of the user with the application triggers a request to the beck-end of the system via HTTPS via the API gateway. Also, this component is responsible for gathering all the required data from the device sensors and GPS, which are directly processed on the server.
+This component acts as the primary user interface, facilitating all user interactions with the platform via HTTPS requests through the API Gateway. It is responsible for the acquisition and transmission of raw data from device sensors and GPS to the back-end, where the data is processed. Additionally, the application implements dynamic view rendering based on authentication state, restricting non-registered users to path exploration features, while providing registered users with all the available functionalities of the platform.
 
-Note that, while registered users have full access of all the platform functionalities, non-registered ones have access only to the path exploration service. The mobile application takes into consideration those limitations and displays to non-registered users only the screens they have access to.
-
-\subsubsection{Back-end}
+\subsubsection{Application Layer Components}
 \paragraph{User Management Component} 
 This component acts as the centralized authority for identity and access management. It handles the complete lifecycle of the user, such as registration, authentication and credential management, and session control. Also, it allows users to modify their profile information, change their preferences and completely delete their account. All these functionalities are provided to the user while ensuring compliance with the GDPR-related policies and privacy regulations.
 
@@ -87,11 +85,39 @@ This component manages the lifecycle of the report entities, distinguishing them
 Upon publication, the service triggers an update to synchronize and expose the public information of the associated path.
 
 \paragraph{Map \& Weather Integration Adapters}
+This component serves as the designated gateway for interactions with external mapping and weather providers. It implements resilience patterns, including timeout handling, fallback strategies, and caching, to ensure system stability. Its primary function is to retrieve weather data to enrich trip information and provides necessary data for map rendering.
 
+\paragraph{Alert Service (?)}
+This service behaves as the central dispatcher for user alerts. It exposes synchronous APIs that allow client applications to retrieve current notification states (e.g., unread counts, history). Additionally, it orchestrates the delivery of messages across multiple channels, including in-app updates, push notifications, and emails, ensuring consistent reachability based on system configuration.
 
+\paragraph{Event Bus}
+This component is the asynchronous communication backbone, using a publish subscribe model to dispatch domain events. It decouples event ingestion from downstream processing, ensuring high availability and scalability. This component includes buffering capabilities to absorb load spikes and implements reliability patterns such as automatic retries and back-pressure management.
 
-\paragraph{Data Tier}
+\paragraph{Tracking Ingestion Endpoint}
+This component acts as a high-throughput gateway designed to receive raw tracking data chunks from client devices. In order to prioritize low latency, it implements a "fast acknowledgment" strategy, accepting the payload and immediately publishing it to the Event Bus for asynchronous processing, without performing blocking validation or heavy computation. This way, the processing of the data is decoupled from its ingestion.
 
+\paragraph{Tracking Processing Worker}
+This background worker acts as the primary consumer of tracking events from the Event Bus. It executes a data processing pipeline that includes cleaning, normalization, and reliable persistence of telemetry data. The component implements fault tolerance logic to reconstruct or flag incomplete data streams and structures the normalized output to support downstream statistical analysis and automatic report generation.
+
+\paragraph{Automatic Report Generator Worker}
+This background worker acts as an event-driven generator that reacts to "\textit{Trip End}" events or data sufficiency thresholds. It automatically compiles analysed data into a preliminary report and persists it in a \code{draft} state. This component only handles the initial creation, while the subsequent review, validation, and publication steps are delegated to the user through the Reporting Service, previously analysed.
+
+\paragraph{Alert Evaluation Worker}
+This event-driven worker consumes streams of environmental data, including weather updates and obstacle reports. When receiving new data, it performs an evaluation by cross-referencing hazards against active planned trips from users. If specific safety thresholds are reached, the worker generates alert events for the users whose itineraries are affected. This component is closely related to the alert service.
+
+\subsubsection{Data Layer}
+\paragraph{Database Management System}
+This component acts as a mediator between the components of the application layer and the databases. It is responsible for managing all domain data, including user profile data and preferences, path information, planned and completed trips, tracking data, reports and any other aggregated data required for proper functioning of the system.
+
+\subsubsection{External Services}
+\paragraph{Map Service}
+This component is a third-party geographical data provider used by the platform. It supplies the assets for map visualization (vector or raster tiles) and other geographical features.
+
+\paragraph{Weather Service}
+This component is a third-party meteorological data provider used by the platform. It supplies access to the current atmospheric conditions, and severe weather warnings for specific geospatial coordinates. This data is consumed via API to enrich trip details and trigger safety alerts for users.
+
+\paragraph{User Device}
+This component is the physical hardware interface and operating system services of the user's mobile device. It serves as the primary source of telemetry, continuously generating geolocation coordinates (via GPS) and motion sensor data. Crucially, it enforces operating system-level security, ensuring that the application can only access this sensitive hardware if the user has explicitly granted the necessary runtime permissions.
 
 \subsection{Deployment View}
 
