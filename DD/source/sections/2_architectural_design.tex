@@ -70,7 +70,7 @@ This component acts as the primary user interface, facilitating all user interac
 This component acts as the centralized authority for identity and access management. It handles the complete lifecycle of the user, such as registration, authentication and credential management, and session control. Also, it allows users to modify their profile information, change their preferences and completely delete their account. All these functionalities are provided to the user while ensuring compliance with the GDPR-related policies and privacy regulations.
 
 \paragraph{Path Exploration Service} 
-This component acts as a central catalogue for all bike path information: more specifically, it allows the user to browse all the available bike paths in a given area, filter them by preference, retrieve path status and obstacles, and search for bike paths connecting a given departure point to a destination one sorted by their score. In general, this component is responsible for managing the lifecycle of all the structural data regarding bike paths and obstacle tracking. 
+This component acts as a central catalogue for all bike path information: more specifically, it allows the user to browse all the available bike paths in a given area, filter them by preference, retrieve path status and obstacles, and search for bike paths connecting a given departure point to a destination one sorted by their score. In general words, this component is responsible for managing the lifecycle of all the structural data regarding bike paths and obstacle tracking. 
 
 \paragraph{Trip Management Service}
 This component is responsible for managing the lifecycle of trip data for both planned and completed ones. It implements soft deletion mechanisms to ensure data integrity and view consistency without permanent data loss. Additionally, this service computes performance statistics, such as distance, duration, average speed and other metrics. Crucially, the service enforces strict data isolation, ensuring that trip details and statistics are accessible exclusively to the user who created them.
@@ -87,8 +87,6 @@ Upon publication, the service triggers an update to synchronize and expose the p
 \paragraph{Map \& Weather Integration Adapters}
 This component serves as the designated gateway for interactions with external mapping and weather providers. It implements resilience patterns, including timeout handling, fallback strategies, and caching, to ensure system stability. Its primary function is to retrieve weather data to enrich trip information and provides necessary data for map rendering.
 
-\paragraph{Alert Service (?)}
-This service behaves as the central dispatcher for user alerts. It exposes synchronous APIs that allow client applications to retrieve current notification states (e.g., unread counts, history). Additionally, it orchestrates the delivery of messages across multiple channels, including in-app updates, push notifications, and emails, ensuring consistent reachability based on system configuration.
 
 \paragraph{Event Bus}
 This component is the asynchronous communication backbone, using a publish subscribe model to dispatch domain events. It decouples event ingestion from downstream processing, ensuring high availability and scalability. This component includes buffering capabilities to absorb load spikes and implements reliability patterns such as automatic retries and back-pressure management.
