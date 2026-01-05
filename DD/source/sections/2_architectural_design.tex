@@ -76,14 +76,10 @@ The Path Exploration Service allows users to browse the inventory of available b
 This component is responsible for managing the lifecycle of trip data for both planned and completed ones. It implements soft deletion mechanisms to ensure data integrity and view consistency without permanent data loss. Additionally, this service computes performance statistics, such as distance, duration, average speed and other metrics. Crucially, the service enforces strict data isolation, ensuring that trip details and statistics are accessible exclusively to the user who created them.
 
 \paragraph{Report Management Service}
-The Reporting component manages both manual and automatic reports as domain entities. In particular it allows publication of reports and validation of automatic report drafts (created by component 12) and UPDATES PUBLIC PATH INFORMATION BASED ON THE NEWLY PUBLISHED REPORTS, these updates are used to enrich path exploration results and to trigger alert evaluations. (In other words a user publishes “hole at path with ID 12,” then the reporting component updates the information regarding path 12 in the database so that the path exploration service component can then display the correct information).
+The Reporting component manages both manual and automatic reports as domain entities. In particular it allows publication of reports and validation of automatic report drafts and updates public path information based on the newly published reports, these updates are used to enrich path exploration results and to trigger alert evaluations. Upon publication, the service triggers an update to synchronize and expose the public information of the associated path.
 
-
-Upon publication, the service triggers an update to synchronize and expose the public information of the associated path.
-
-\paragraph{Map \& Weather Integration Adapters}
+\paragraph{Map \& Weather Adapters}
 This component serves as the designated gateway for interactions with external mapping and weather providers. It implements resilience patterns, including timeout handling, fallback strategies, and caching, to ensure system stability. Its primary function is to retrieve weather data to enrich trip information and provides necessary data for map rendering.
-
 
 \paragraph{Event Bus}
 This component is the asynchronous communication backbone, using a publish subscribe model to dispatch domain events. It decouples event ingestion from downstream processing, ensuring high availability and scalability. This component includes buffering capabilities to absorb load spikes and implements reliability patterns such as automatic retries and back-pressure management.
@@ -95,14 +91,16 @@ The Tracking Ingestion Endpoint acts as the entry point for tracking data genera
 The Tracking Processing Worker consumes tracking events from the event bus ,produced by the Tracking Ingestion Endpoint, and performs cleaning, normalization, and validation of the collected data. It handles incomplete or inconsistent sensor readings and persists processed tracking data in the database, making them available for statistics computation and report generation.
 
 \paragraph{Automatic Report Generator Worker}
-The Auto Report Generator Worker reacts to trip completion events. It aggregates processed tracking information and generates automatic report drafts in background, which are later reviewed, validated, and published through the Reporting component. (Basically the component 11 create the automatic report draft, the component 7 instead allow to publish reports or to validate automatic reports drafts)
+The Auto Report Generator Worker reacts to trip completion events. It aggregates processed tracking information and generates automatic report drafts in background, which are later reviewed, validated, and published through the Reporting component.
 
+\paragraph{Alert Service Worker}
+The Alert Service Worker listens for contextual updates such as weather changes and newly published obstacle reports. It evaluates these events against predefined severity thresholds and determines their impact on planned trips. When critical conditions are detected, it directly triggers alert notifications for affected users that have requested updates. 
 
-\paragraph{Alert Evaluation Worker}
-The Alert Evaluation Worker listens for contextual updates such as weather changes and newly published obstacle reports. It evaluates these events against predefined severity thresholds and determines their impact on planned trips. When critical conditions are detected, it directly triggers alert notifications for affected users. (write here how it works, so:
-- notification for weather-> low frequency polling with weather adapter
-- notification for obstacles-> event ReportPublished tells the alert component to access to the considered path in the report and check for possible obstancles 
+For weather alerts, the component periodically runs a polling mechanism to query weather data from external data sources using the weather adapter, and computes a severity score for each of the trips planned by the user. 
 
+For obstacles alerts, the component listens to the Event Bus for \code{ReportPublished} events and computes a severity score for a planned trip if there's an obstacle inside the report that interests that same trip. 
+
+Once the severity score of a given planned trip exceeds some threshold value, the Alert Service Worker sends a notification to the user.  
 
 \subsubsection{Data Layer}
 \paragraph{Database Management System}
@@ -144,6 +142,118 @@ The application server handles all the incoming requests from users interacting 
 The database runs on a clustered architecture to ensure high availability and data consistency. This configuration guarantees that all nodes maintain identical dataset and that the application server is updated with the latest information, preventing errors caused by data mismatches between nodes.
 
 \subsection{Runtime View}
+The following diagrams show the interaction between the various component that make up the BBP system. Note that the message flow modelled by these sequence diagrams do not include all the possible exceptions the system can run into for a matter of simplicity. Furthermore, as already mentioned before, every interaction between the client and the server is mediated by the API Gateway component, which also has caching mechanisms and acts as a session handler for registered users. These functionalities are not shown in the diagrams to make them more readable. 
+\newline
+
+\noindent
+\textbf{UC1: User Registration}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams//sd_registration.png}
+    \caption{User Registration Sequence Diagram.}
+    \label{fig:registration_sd}
+\end{figure}
+
+\noindent
+\textbf{UC2: User Login}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_login.png}
+    \caption{User Login Sequence Diagram.}
+    \label{fig:sd_login}
+\end{figure}
+
+\noindent
+\textbf{UC3: Update Profile Data}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_update_profile.png}
+    \caption{Update Profile Data Sequence Diagram.}
+    \label{fig:update_sd}
+\end{figure}
+
+\noindent
+\textbf{UC4: Delete Account}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_delete_account.png}
+    \caption{Delete Account Sequence Diagram.}
+    \label{fig:delete_sd}
+\end{figure}
+
+\noindent
+\textbf{UC5: Browse Bike Paths}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_browse.png}
+    \caption{Browse Bike Paths Sequence Diagram.}
+    \label{fig:browse_sd}
+\end{figure}
+
+\noindent
+\textbf{UC6: Plan Trips}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_plan.png}
+    \caption{Plan Trips Sequence Diagram.} 
+    \label{fig:plan_sd}
+\end{figure}
+
+\noindent
+\textbf{UC7: Change Automatic Tracking Settings}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_change_pref.png}
+    \caption{Change Automatic Tracking Settings Sequence Diagram.}
+    \label{fig:change_prefs_sd}
+\end{figure}
+
+\noindent
+\textbf{UC8: View History and Statistics of Completed Trips}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{DD//source//images//diagrams/sd_details.png}
+    \caption{View History and Statistics of Completed Trips Sequence Diagram.}
+    \label{fig:details_sd}
+\end{figure}
+
+\noindent
+\textbf{UC9: Delete Trips from History}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_delete_trip.png}
+    \caption{Delete Trips from History Sequence Diagram.}
+    \label{fig:delete_trip_sd}
+\end{figure}
+
+\noindent
+\textbf{UC10: Manual Report}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_manual.png}
+    \caption{Manual Report Sequence Diagram.}
+    \label{fig:manual_sd}
+\end{figure}
+
+\noindent
+\textbf{UC11: Automatic Report}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_automatic.png}
+    \caption{Automatic Report Sequence Diagram.}
+    \label{fig:automatic_sd}
+\end{figure}
+
+
+\noindent
+\textbf{UC12: Receive Trip Alerts}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{DD//source//images//diagrams/sd_alerts.png}
+    \caption{Receive Trip Alerts Sequence Diagram.}
+    \label{fig:alerts_sd}
+\end{figure}
+
 
 
 % \subsection{Component Interfaces}
