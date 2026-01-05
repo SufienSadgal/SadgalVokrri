@@ -66,7 +66,7 @@ As already mentioned in the previous section, the BBP system adopts a 3-tier arc
 This component acts as the primary user interface, facilitating all user interactions with the platform via HTTPS requests through the API Gateway. It is responsible for the acquisition and transmission of raw data from device sensors and GPS to the back-end, where the data is processed. Additionally, the application implements dynamic view rendering based on authentication state, restricting non-registered users to path exploration features, while providing registered users with all the available functionalities of the platform.
 
 \subsubsection{Application Layer Components}
-\paragraph{User Management Component} 
+\paragraph{User Management Service} 
 This component acts as the centralized authority for identity and access management. It handles the complete lifecycle of the user, such as registration, authentication and credential management, and session control. Also, it allows users to modify their profile information, change their preferences and completely delete their account. All these functionalities are provided to the user while ensuring compliance with the GDPR-related policies and privacy regulations.
 
 \paragraph{Path Exploration Service} 
@@ -128,7 +128,7 @@ This component is the physical hardware interface and operating system services 
 \end{figure}
 
 \paragraph{Mobile Device}
-The device is used by the BBP users to access the platform, via the mobile application. The user is required to download the application from centralized distribution channels like Google Play Store (for Android) or App Store (for iOS), in order to interact with the system. Also, the device is responsible for gathering all the GPS and sensor data, required for the correct functioning of certain features of the application. 
+The device is used by the BBP users to access the platform, via the mobile application. The user is required to download the application from centralized distribution channels like Google Play Store (for Android) or App Store (for iOS), in order to interact with the system. Also, the device is responsible for gathering all the GPS and sensor data, required for the correct functioning of specific features of the application. 
 
 All data exchange between the mobile client and the server infrastructure is encapsulated over HTTPS, passing through a load balancer, for high availability, and firewalls, for robust security. Requests are finalized at the API Gateway, which acts as the single entry point for the back-end, handling request routing, rate limiting, and authentication before passing data to the internal application servers.
 
@@ -144,7 +144,8 @@ The application server handles all the incoming requests from users interacting 
 \paragraph{Database Management System Server}
 The database runs on a clustered architecture to ensure high availability and data consistency. This configuration guarantees that all nodes maintain identical dataset and that the application server is updated with the latest information, preventing errors caused by data mismatches between nodes.
 
-% \subsection{Runtime View}
+\subsection{Runtime View}
+
 
 % \subsection{Component Interfaces}
 
