@@ -129,3 +129,73 @@ In this screen the user can see his personal information and the number of activ
     \caption{Profile Screen.}
     \label{fig:profile_screen}
 \end{figure}
+
+
+
+
+
+REQUIREMENTS TRACEABILITY
+
+1. Account and Access Management
+(FR: R1–R4)
+Componenti coinvolti
+1) Web/Mobile Client
+2) API Gateway / Backend API
+3) User Management Component
+
+2. Bike Path Discovery and Visualisation
+(FR: R5–R6)
+Componenti coinvolti
+1) Web/Mobile Client
+2) API Gateway / Backend API
+4) Path Exploration Service
+5) Map & Weather Integration
+13) Persistence Store
+14) External Map Service
+
+3. Trip Planning and Route Recommendation
+(FR: R7–R9)
+Componenti coinvolti
+1) Web/Mobile Client
+2) API Gateway / Backend API
+4) Path Exploration Service
+5) Map & Weather Integration
+6) Trip Management Service
+13) Persistence Store
+14) External Map Service
+
+
+4. Trip Tracking, History and Performance Analytics
+(FR: R10–R14)
+Componenti coinvolti
+1) Web/Mobile Client
+2) API Gateway / Backend API
+6) Trip Management Service
+8) Event Bus / Message Queue
+9) Tracking Ingestion Endpoint
+10) Tracking Processing Worker
+13) Persistence Store
+16) User Device (Sensors/GPS)
+User Management Component
+
+
+
+5. Reporting, Validation and Publication of Path Information
+(FR: R15–R19)
+Componenti coinvolti
+1) Web/Mobile Client
+2) API Gateway / Backend API
+7) Reporting
+8) Event Bus / Message Queue
+11) Auto Report Generator Worker
+13) Persistence Store
+
+6. Context Enrichment and Notifications
+(FR: R20–R22)
+Componenti coinvolti
+2) API Gateway / Backend API
+5) Map & Weather Integration
+8) Event Bus / Message Queue
+12) Alert Evaluation Worker
+13) Persistence Store
+15) External Weather Service
