@@ -1,0 +1,156 @@
+\section{Requirements Traceability}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Requirements & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item R1: The system shall allow biker to create an account.
+            \item R2: The system shall allow registered users to log in.
+            \item R3: The system shall allow registered users to update information in their profile.
+            \item R4: The system shall allow registered users to delete their account.
+        \end{itemize} \\
+        \hline
+        Components & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item Mobile Client
+            \item API Gateway
+            \item User Management Service
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Account and Access Management Mapping.}
+    \label{tab:account_mapping}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Requirements & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item R5: The system shall allow users to browse the inventory of paths
+            \item R6: The system shall allow users to visualise available bike paths on a map provided by an external map service.
+        \end{itemize} \\
+        \hline
+        Components & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item Mobile Client
+            \item API Gateway
+            \item Path Exploration Service
+            \item Map \& Weather Integration
+            \item DBMS
+            \item External Map Service
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Bike Path Discovery and Visualisation Mapping.}
+    \label{tab:explore_mapping}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Requirements & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item R7: The system shall allow registered users to plan a bike trip by storing it among planned trips,
+            \item R8: The system shall allow the user to specify a starting and ending point in order to retrieve all the possible path between them.
+            \item R9: In case a registered user has provided a departure and a destination point, the system shall return the possible paths ordered based on their scores.
+        \end{itemize} \\
+        \hline
+        Components & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item Mobile Client
+            \item API Gateway
+            \item Path Exploration Service
+            \item Map \& Weather Integration
+            \item Trip Management Service
+            \item DBMS
+            \item External Map Service
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Trip Planning and Route Recommendation Mapping.}
+    \label{tab:trip_planning_mapping}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Requirements & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item R10: The system shall allow registered users to record their trips.
+            \item R11: The system shall provide registered users with statistics about their cycling performance.
+            \item R12: The system shall allow registered users to view all the non deleted past trips.
+            \item R13: The system shall allow registered users to delete trips from their trip history.
+            \item R14: The system shall allow registered users to enable or disable automatic trip tracking.
+        \end{itemize} \\
+        \hline
+        Components & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item Mobile Client
+            \item API Gateway
+            \item Trip Management Service
+            \item Event Bus
+            \item Tracking Ingestion Endpoint
+            \item Tracking Processing Worker
+            \item DBMS
+            \item User Device (Sensors/GPS)
+            \item User Management Service
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Trip Tracking, History and Performance Analytics Mapping.}
+    \label{tab:trip_planning_mapping}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Requirements & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item R15: The system shall allow registered users to manually produce a report.
+            \item R16: The system shall allow registered users to automatically produce a report.
+            \item R17: The system shall allow registered users to review and validate reports produced automatically.
+            \item R18: The system shall allow registered users to publish manual reports.
+            \item R19: The system shall allow registered users to publish validated reports produced automatically.
+        \end{itemize} \\
+        \hline
+        Components & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item Mobile Client
+            \item API Gateway
+            \item Reporting
+            \item Event Bus
+            \item Auto Report Generator Worker
+            \item DBMS
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Reporting, Validation and Publication of Path Information Mapping.}
+    \label{tab:reporting_mapping}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.75\textwidth}|}
+        \hline
+        Requirements & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*]
+            \item R20: The system shall notify registered users with planned trips when relevant weather conditions affecting the trip exceed a predefined severity threshold.
+            \item R21: The system shall notify registered users with planned trips when obstacles along the associated path exceed a predefined severity threshold.
+            \item R22: The system shall enrich trips in the inventory with meteorological information retrieved from an external weather service when available.
+        \end{itemize} \\
+        \hline
+        Components & \begin{itemize}[topsep=0pt, partopsep=0pt, leftmargin=*] 
+            \item API Gateway
+            \item Map \& Weather Integration
+            \item Event Bus
+            \item Alert Evaluation Worker
+            \item DBMS
+            \item External Weather Service
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Reporting, Validation and Publication of Path Information Mapping.}
+    \label{tab:reporting_mapping}
+\end{table}
