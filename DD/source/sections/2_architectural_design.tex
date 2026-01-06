@@ -94,13 +94,13 @@ The Tracking Processing Worker consumes tracking events from the event bus, prod
 The Auto Report Generator Worker reacts to trip completion events. It aggregates processed tracking information and generates automatic report drafts in background, which are later reviewed, validated, and published through the Reporting component.
 
 \paragraph{Alert Service Worker}
-The Alert Service Worker listens for contextual updates such as weather changes and newly published obstacle reports. It evaluates these events against predefined severity thresholds and determines their impact on planned trips. When critical conditions are detected, it directly triggers alert notifications for affected users that have requested updates. 
+The Alert Service Worker listens for contextual updates such as weather changes and newly published obstacle reports. It evaluates these events against predefined severity thresholds and determines their impact on users’ planned trips. When critical conditions are detected, it directly triggers alert notifications for affected users who have requested updates.
 
-For weather alerts, the component periodically runs a polling mechanism to query weather data from external data sources using the weather adapter, and computes a severity score for each of the trips planned by the user. 
+For weather-related alerts, the component periodically executes a low-frequency polling mechanism to retrieve meteorological data from external sources through the Map and Weather Integration component. This design choice is motivated by the need to reduce coupling between the alert logic and the weather adapter. Without polling, the weather adapter would be responsible for continuously monitoring weather conditions and actively notifying the Alert Service Worker in case of adverse forecasts, thereby assuming part of the alert evaluation responsibility. By adopting controlled polling, the Alert Service Worker remains the sole component responsible for alert detection logic, while the weather adapter is limited to data retrieval and normalization.
 
 For obstacles alerts, the component listens to the Event Bus for \code{ReportPublished} events and computes a severity score for a planned trip if there's an obstacle inside the report that interests that same trip. 
-
-Once the severity score of a given planned trip exceeds some threshold value, the Alert Service Worker sends a notification to the user.  
+Whenever the computed severity score for a planned trip exceeds a predefined threshold, the Alert Service Worker sends a notification to the corresponding user, ensuring timely and reactive alert delivery without introducing unnecessary coupling or continuous monitoring overhead in other components.
+ 
 
 \subsubsection{Data Layer}
 \paragraph{Database Management System}
